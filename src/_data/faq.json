@@ -1,0 +1,56 @@
+[
+  {
+    "id": "classes",
+    "question": "What classes are offered?",
+    "answer": "We offer Play Group, Nursery, KG 1 and KG 2. Day Care is also available.",
+    "group": "programmes",
+    "showOnHome": true,
+    "homeOrder": 1,
+    "tags": ["admissions"]
+  },
+  {
+    "id": "day-care",
+    "question": "Is Day Care available?",
+    "answer": "Yes. Feather Touch provides a Day Care facility for children who require extended care.",
+    "group": "programmes",
+    "showOnHome": true,
+    "homeOrder": 2,
+    "tags": ["day-care"]
+  },
+  {
+    "id": "methodology",
+    "question": "What teaching methodology is followed?",
+    "answer": "We use a child-friendly combination of play-based, activity-based and experiential learning.",
+    "group": "learning",
+    "showOnHome": true,
+    "homeOrder": 3,
+    "tags": []
+  },
+  {
+    "id": "activities",
+    "question": "Are extracurricular activities conducted?",
+    "answer": "Yes. Children participate in age-appropriate creative, cultural, physical and educational activities throughout the academic year.",
+    "group": "learning",
+    "showOnHome": false,
+    "homeOrder": null,
+    "tags": []
+  },
+  {
+    "id": "enquire",
+    "question": "How can I enquire about admission?",
+    "answer": "Parents can contact the school directly by phone/WhatsApp or visit the school for an admission enquiry.",
+    "group": "admissions",
+    "showOnHome": true,
+    "homeOrder": 5,
+    "tags": ["admissions"]
+  },
+  {
+    "id": "visit",
+    "question": "Can parents visit the school?",
+    "answer": "Yes. Parents are welcome to schedule a school visit and understand our programmes.",
+    "group": "admissions",
+    "showOnHome": true,
+    "homeOrder": 4,
+    "tags": ["admissions"]
+  }
+]

@@ -1,0 +1,411 @@
+================================================================================
+FEATHER TOUCH FOUNDATION SCHOOL & DAY CARE CENTRE
+CONTENT & ASSET INVENTORY MAP
+================================================================================
+Document: 05 — Feather Touch Content & Asset Map.txt
+Repository: /Users/utkarsh/NGO-Work
+Branch: feat/redesign-foundation (Git Commit: 52ceb76)
+Analysis Date: September 2026
+Purpose: Read-only data structure, content integrity, and asset inventory package
+for Claude Project visual and UX redesign.
+================================================================================
+
+--------------------------------------------------------------------------------
+1. DATA & CONTENT SOURCES MAP
+--------------------------------------------------------------------------------
+
+The Eleventy project stores all structured content in `src/_data/`. The table below details every data file, its controlling domain, key content items, and known missing information.
+
+--------------------------------------------------------------------------------
+FILE: src/_data/site.json
+CONTROLS: Central school metadata, contact points, location, operational hours, form backend, and launch readiness gates.
+IMPORTANT CONTENT:
+- `name`: "Feather Touch Foundation School and Day Care Centre"
+- `shortName`: "Feather Touch"
+- `tagline`: "Nurturing Little Minds, Building Strong Foundations."
+KNOWN MISSING INFORMATION:
+- `url`: null [CONTENT REQUIRED]
+- `contact.phoneDisplay`: null [CONTENT REQUIRED]
+- `contact.phoneE164`: null [CONTENT REQUIRED]
+- `contact.whatsappDisplay`: null [CONTENT REQUIRED]
+- `contact.whatsappDigits`: null [CONTENT REQUIRED]
+- `contact.email`: null [CONTENT REQUIRED]
+- `address.streetAddress`: null [CONTENT REQUIRED]
+- `address.locality`: null [CONTENT REQUIRED]
+- `address.city`: null [CONTENT REQUIRED]
+- `address.region`: null [CONTENT REQUIRED]
+- `address.postalCode`: null [CONTENT REQUIRED]
+- `address.country`: null [CONTENT REQUIRED]
+- `mapsUrl`: null [CONTENT REQUIRED]
+- `mapsEmbedUrl`: null [CONTENT REQUIRED]
+- `hours.school`: null [CONTENT REQUIRED]
+- `hours.office`: null [CONTENT REQUIRED]
+- `hours.visiting`: null [CONTENT REQUIRED]
+- `admissions.sessionLabel`: null [CONTENT REQUIRED]
+- `admissions.completionText`: null [CONTENT REQUIRED]
+- `admissions.documents`: [] [CONTENT REQUIRED]
+- `visit.whatToExpect`: null [CONTENT REQUIRED]
+- `safety.practices`: [] [CONTENT REQUIRED]
+- `forms.delivery`: "none" (no active email/webhook pipeline) [INTEGRATION REQUIRED]
+- `forms.endpoint`: null [INTEGRATION REQUIRED]
+- `forms.responseTimeText`: null [CONTENT REQUIRED]
+- `social`: [] [CONTENT REQUIRED]
+- `launch.contentSignOff`: false [CLIENT SIGN-OFF REQUIRED]
+- `launch.privacyPolicyApproved`: false [LEGAL APPROVAL REQUIRED]
+- `launch.logoSupplied`: false [ASSET REQUIRED]
+- `launch.ogImageConsent`: false [LEGAL/ASSET REQUIRED]
+
+--------------------------------------------------------------------------------
+FILE: src/_data/about.json
+CONTROLS: School introduction, educational philosophy, vision, mission, pedagogy, developmental areas, safety commitments, and parent partnership principles.
+IMPORTANT CONTENT:
+- `lead`: "Feather Touch Foundation School and Day Care Centre is a nurturing early childhood education centre dedicated to providing quality foundational education in a safe, caring and stimulating environment."
+- `paragraphs`: 2 descriptive paragraphs focusing on play-based learning and removing rote learning pressure.
+- `vision`: "To create a happy, safe and stimulating learning environment where every child gets the opportunity to discover their potential, develop confidence and build strong foundations for lifelong learning."
+- `mission`: 7 structured mission statements (Quality education, individual strengths, joyful learning, communication/creativity, positive social behaviour, safety/kindness awareness, parent partnership).
+- `approach.header`: "We Believe Children Learn Best When They Are Happy."
+- `approach.lead`: "At Feather Touch, classrooms are not just places where children sit and listen. They are spaces where children explore, experiment, ask questions, create and discover."
+- `approach.methods`: 7 core learning methods with descriptions:
+  1. Activity-Based Learning
+  2. Experiential Learning
+  3. Role Play
+  4. Story-Based Learning
+  5. Music & Movement
+  6. Art & Creativity
+  7. Nature & Environmental Learning
+- `development.lead`: "At Feather Touch, we guide young minds across all essential dimensions of early growth."
+- `development.areas`: 6 developmental domains with descriptions:
+  1. Cognitive Development
+  2. Language Development
+  3. Physical Development
+  4. Emotional Development
+  5. Social Development
+  6. Creative Development
+- `safety.heading`: "A Safe Childhood is the First Step Towards a Strong Future"
+- `safety.lead`: "At Feather Touch, the safety and well-being of every child is a fundamental priority."
+- `safety.topics`: 8 topics (Personal safety, Safe and unsafe touch, Good and bad behaviour, Respect for others, Personal boundaries, Asking for help, Healthy habits, Emotional well-being).
+- `safety.commitmentNote`: "We also believe that child protection is a shared responsibility between school, parents and the community."
+- `partnership.heading`: "Parents + Teachers = Stronger Foundations"
+- `partnership.lead`: "A child's development becomes stronger when parents and teachers work together."
+- `partnership.items`: 6 collaboration areas (PTMs, Progress discussions, Activity updates, School events, Parent-child activities, Feedback).
+- `partnership.closing`: "Together, We Help Children Grow."
+KNOWN MISSING INFORMATION:
+- None for the current presentation scope. High narrative completeness.
+
+--------------------------------------------------------------------------------
+FILE: src/_data/programmes.json
+CONTROLS: Academic programmes grid (Play Group, Nursery, KG 1, KG 2).
+IMPORTANT CONTENT:
+- 4 programme objects with `slug`, `name`, `tagline`, and `focusAreas`:
+  1. Play Group: Tagline "Learning Begins With Wonder"; 7 focus areas (Socialisation, Language development, Motor skills, Sensory exploration, Music & movement, Creative expression, Basic concepts).
+  2. Nursery: Tagline "Explore. Discover. Learn."; 8 focus areas (Letters and sounds, Numbers and basic concepts, Colours and shapes, Rhymes and stories, Art & craft, Environmental awareness, Fine/gross motor, Social/emotional).
+  3. KG 1: Tagline "Growing Confidence, Growing Knowledge"; 9 focus areas (English language, Early literacy, Numeracy, General awareness, Rhymes/storytelling, Art & craft, Creative activities, Physical development, Social skills).
+  4. KG 2: Tagline "Preparing Children for the Next Big Step"; 8 focus areas (Reading readiness, Writing skills, Number concepts, Communication, Logical thinking, General awareness, Creative expression, Confidence/independence).
+KNOWN MISSING INFORMATION:
+- `ageGroup`: null for all 4 programmes [CONTENT REQUIRED]
+- `timings`: null for all 4 programmes [CONTENT REQUIRED]
+- `overview`: null for all 4 programmes [CONTENT REQUIRED]
+- `parentExpectations`: null for all 4 programmes [CONTENT REQUIRED]
+- `imageId`: null for all 4 programmes [CONTENT REQUIRED]
+
+--------------------------------------------------------------------------------
+FILE: src/_data/dayCare.json
+CONTROLS: Extended day care service banner and offerings.
+IMPORTANT CONTENT:
+- `heading`: "Caring beyond the classroom"
+- `lead`: "For working parents and families who need extended care, Feather Touch Day Care Centre provides a caring and comfortable environment where children can spend their time safely."
+- `quote`: "Because Your Child Deserves Care That Feels Like Home."
+- `includes`: 8 service offerings (Safe/supervised care, Rest/relaxation, Creative activities, Storytelling, Indoor play, Age-appropriate learning, Social interaction, Warm/caring environment).
+KNOWN MISSING INFORMATION:
+- `hours`: null [CONTENT REQUIRED]
+- `ageRange`: null [CONTENT REQUIRED]
+- `meals`: null [CONTENT REQUIRED]
+- `pickup`: null [CONTENT REQUIRED]
+
+--------------------------------------------------------------------------------
+FILE: src/_data/daySequence.json
+CONTROLS: Typical school day timeline sequence.
+IMPORTANT CONTENT:
+- 9 sequential steps:
+  1. Welcome & Settling In
+  2. Circle Time
+  3. Concept-Based Learning
+  4. Rhymes & Music
+  5. Activity / Art & Craft
+  6. Snack / Healthy Tiffin
+  7. Outdoor / Physical Activity
+  8. Storytelling & Creative Learning
+  9. Recap & Goodbye
+KNOWN MISSING INFORMATION:
+- `time`: null for all 9 steps [CONTENT REQUIRED] (Currently rendered as numbered steps 1–9 without timestamps).
+
+--------------------------------------------------------------------------------
+FILE: src/_data/activities.json
+CONTROLS: School life activities and annual events pill cloud.
+IMPORTANT CONTENT:
+- Array of 19 activities and celebrations:
+  1. Green Day
+  2. Plantation Activities
+  3. Healthy Tiffin Day
+  4. Guru Purnima Celebration
+  5. Colouring Competition
+  6. Fancy Dress Competition
+  7. Rakhi Making
+  8. Janmashtami Celebration
+  9. Ganesh Chaturthi
+  10. Parent-Child Fireless Cooking
+  11. Gandhi Jayanti
+  12. Community Helpers Role Play
+  13. Diwali Celebration
+  14. Children's Day
+  15. Poem Recitation
+  16. Christmas Celebration
+  17. Storytelling
+  18. Republic Day
+  19. Sports Activities
+KNOWN MISSING INFORMATION:
+- No photos or event dates linked to these activities [CONTENT REQUIRED].
+
+--------------------------------------------------------------------------------
+FILE: src/_data/recognition.json
+CONTROLS: Positive student reinforcement and star award categories.
+IMPORTANT CONTENT:
+- `intro`: "We encourage children by recognising their efforts, participation and positive behaviour."
+- `categories`: 6 categories:
+  1. Star Attendance
+  2. Star Academics
+  3. Well-Mannered Star
+  4. Star Participant
+  5. Star in Uniform
+  6. Star in Punctuality
+- `closing`: "We Celebrate Effort, Not Just Achievement."
+KNOWN MISSING INFORMATION:
+- None. Complete concept text.
+
+--------------------------------------------------------------------------------
+FILE: src/_data/images.json
+CONTROLS: Gallery image cards, captions, alt text, and focal positioning.
+IMPORTANT CONTENT:
+- 3 image metadata records:
+  1. `id`: "classroom-puzzle"
+     `source`: "WhatsApp_Image_2026-09-14_at_20_28_25.jpeg"
+     `alt`: "Two children in Feather Touch uniforms fit pieces into a foam puzzle together at a classroom table."
+     `caption`: "Solving a puzzle together in class."
+     `focal`: { base: "50% 40%", md: "50% 45%", square: "50% 60%" }
+     `galleryCategory`: "classrooms"
+     `consentConfirmed`: false
+  2. `id`: "classroom-colouring"
+     `source`: "WhatsApp_Image_2026-09-14_at_20_27_56.jpeg"
+     `alt`: "A child concentrates on colouring a sun in an activity book at a classroom table."
+     `caption`: "Colouring during an activity session."
+     `focal`: { base: "45% 55%", md: "45% 58%", square: "45% 55%" }
+     `galleryCategory`: "learning"
+     `consentConfirmed`: false
+  3. `id`: "welcome-back"
+     `source`: "WhatsApp_Image_2026-09-14_at_20_28_58.jpeg"
+     `alt`: "A child stands between large paper flowers under a handmade 'Welcome Back to School' sign at the school entrance."
+     `caption`: "Welcome back to school."
+     `focal`: { base: "48% 35%", md: "45% 40%", square: "45% 40%" }
+     `galleryCategory`: "events"
+     `consentConfirmed`: false
+KNOWN MISSING INFORMATION:
+- The actual JPEG binary files are NOT present on disk in `src/assets/images/source/`.
+- All 3 images have `consentConfirmed: false` [CONSENT REQUIRED].
+- High-resolution photographic assets are not yet supplied.
+
+--------------------------------------------------------------------------------
+FILE: src/_data/faq.json
+CONTROLS: Frequently Asked Questions accordion.
+IMPORTANT CONTENT:
+- 6 Q&A items:
+  1. "What classes are offered?" -> "We offer Play Group, Nursery, KG 1 and KG 2. Day Care is also available." (group: programmes)
+  2. "Is Day Care available?" -> "Yes. Feather Touch provides a Day Care facility for children who require extended care." (group: programmes)
+  3. "What teaching methodology is followed?" -> "We use a child-friendly combination of play-based, activity-based and experiential learning." (group: learning)
+  4. "Are extracurricular activities conducted?" -> "Yes. Children participate in age-appropriate creative, cultural, physical and educational activities throughout the academic year." (group: learning)
+  5. "How can I enquire about admission?" -> "Parents can contact the school directly by phone/WhatsApp or visit the school for an admission enquiry." (group: admissions)
+  6. "Can parents visit the school?" -> "Yes. Parents are welcome to schedule a school visit and understand our programmes." (group: admissions)
+KNOWN MISSING INFORMATION:
+- Fee structure FAQ, transport availability FAQ, student-teacher ratio FAQ [CONTENT REQUIRED].
+
+--------------------------------------------------------------------------------
+FILE: src/_data/testimonials.json
+CONTROLS: Parent reviews and testimonials section.
+IMPORTANT CONTENT:
+- Currently an empty array `[]`.
+KNOWN MISSING INFORMATION:
+- No verified parent testimonials have been supplied or signed off. (The template suppresses rendering when array is empty).
+
+--------------------------------------------------------------------------------
+FILE: src/_data/navigation.json
+CONTROLS: Navigation routing scheme for potential multi-page structure.
+IMPORTANT CONTENT:
+- Primary routes: `/`, `/about/`, `/programmes/`, `/day-care/`, `/activities/`, `/safety/`, `/admissions/`, `/contact/`.
+- CTA: "Enquire Now" -> `/admissions/#enquire`.
+- Footer routes: Same as primary.
+KNOWN MISSING INFORMATION:
+- The corresponding `.njk` templates for these sub-routes do not exist yet. Current active site relies on in-page hash links (`#about`, `#programmes`, etc.) hardcoded in `header.njk`.
+
+--------------------------------------------------------------------------------
+FILE: src/_data/people.json
+CONTROLS: Leadership, educators, and staff profiles.
+IMPORTANT CONTENT:
+- Currently an empty array `[]`.
+KNOWN MISSING INFORMATION:
+- No staff or educator profiles provided.
+
+--------------------------------------------------------------------------------
+FILE: src/_data/gallery.json
+CONTROLS: Extended gallery metadata.
+IMPORTANT CONTENT:
+- Currently an empty array `[]`. (The template iterates over `images.json`, not `gallery.json`).
+
+--------------------------------------------------------------------------------
+FILE: src/_data/build.js
+CONTROLS: Build-time environment flags.
+IMPORTANT CONTENT:
+- Exposes `mode` ("production" if `process.env.SITE_MODE === "production"`, else "preview").
+- Exposes `year` (dynamically resolves `new Date().getFullYear()`).
+
+--------------------------------------------------------------------------------
+FILE: src/_data/site.js
+CONTROLS: Custom data loader enabling test overrides.
+IMPORTANT CONTENT:
+- Reads `src/_data/site.json`, or overrides with `SITE_DATA_FILE` env variable during automated testing.
+
+================================================================================
+2. AUTHENTIC ASSET INVENTORY
+================================================================================
+
+A thorough scan of the entire repository reveals that ZERO bitmap (JPEG, PNG, WebP) or vector (SVG file) assets exist on disk in either `assets/` or `src/assets/images/`.
+
+Below is the verified inventory of all real assets found in the repository:
+
+1. ASSET: Official School Logo (Vector / Raster)
+   - File: NONE ON DISK
+   - Type: [MISSING ASSET]
+   - Subject/Purpose: Primary school brand identity for header, footer, favicon, OG cards.
+   - Current Usage: `header.njk` uses Lucide checkmark icon (`#icon-circle-check`) as a temporary visual placeholder mark. (The legacy root prototype `index.html` contained an inline SVG stylized feather/sprout icon).
+   - Potential Design Usage: Will replace the placeholder brand mark in `header.njk` and `footer.njk` once supplied.
+   - Restrictions/Notes: `site.json` explicitly marks `launch.logoSupplied: false`. Real logo must be requested from client.
+
+2. ASSET: Classroom and School Photography
+   - File: NONE ON DISK (`src/assets/images/source/` contains only `.gitkeep`)
+   - Type: [MISSING ASSET]
+   - Subject/Purpose: Authentic photos of classrooms, puzzle solving, colouring, entrance welcome board.
+   - Current Usage: `src/index.njk` renders CSS placeholder boxes (`.gallery-card__placeholder`) showing category badge, photo caption, and photo ID string.
+   - Potential Design Usage: Card background imagery, lightbox zoom, hero backdrop.
+   - Restrictions/Notes: `images.json` references 3 WhatsApp filenames (`WhatsApp_Image_2026-09-14_at_20_28_25.jpeg`, etc.), but files are absent from the repo and marked `consentConfirmed: false`. Real school photography CANNOT be displayed in production without explicit parental consent and signed-off media releases.
+
+3. ASSET: Iconography (Lucide SVG Symbol Sprite)
+   - File: `src/_includes/partials/icons.njk`
+   - Type: Inline SVG `<symbol>` Sprite (11 icons)
+   - Subject/Purpose: UI iconography for contact points, navigation, trust pills, accordions.
+   - Current Usage:
+     - `#icon-menu`: Mobile hamburger button
+     - `#icon-x`: Mobile menu close button
+     - `#icon-phone`: Phone contact cards and footer link
+     - `#icon-message-circle`: WhatsApp messaging indicators
+     - `#icon-map-pin`: Campus address card and footer link
+     - `#icon-clock`: Time/hours indicators
+     - `#icon-mail`: Email contact cards and footer link
+     - `#icon-circle-alert`: Development preview notices
+     - `#icon-circle-check`: Trust pills, mission items, day care features, safety items, logo mark placeholder
+     - `#icon-external-link`: Outbound links
+     - `#icon-chevron-down`: FAQ accordion chevron
+   - Potential Design Usage: Clean, lightweight, scalable icon system throughout all redesigned components.
+   - Restrictions/Notes: Licensed under ISC License (`src/assets/icons/LICENSE-lucide.txt`). Additional Lucide icons can be added to the sprite as needed without introducing external dependencies.
+
+4. ASSET: Typography (Self-Hosted Web Fonts)
+   - Files:
+     - `src/assets/fonts/bricolage-grotesque-600.woff2` (22 KB)
+     - `src/assets/fonts/bricolage-grotesque-700.woff2` (22 KB)
+     - `src/assets/fonts/atkinson-hyperlegible-next-400.woff2` (12 KB)
+     - `src/assets/fonts/atkinson-hyperlegible-next-600.woff2` (12 KB)
+   - Type: WOFF2 web font binaries
+   - Subject/Purpose: Complete visual typography hierarchy.
+     - Bricolage Grotesque: Expressive, friendly, geometric sans-serif for headings, badges, and button labels.
+     - Atkinson Hyperlegible Next: Highly readable, accessible sans-serif designed for clear body copy and low-vision legibility.
+   - Current Usage: Loaded via `@font-face` in `src/assets/css/main.css`.
+   - Potential Design Usage: Forms the foundational typographic character of the school website.
+   - Restrictions/Notes: Open Font License (OFL) documentation included (`OFL-bricolage-grotesque.txt`, `OFL-atkinson-hyperlegible-next.txt`). Total font weight is 68 KB, comfortably within the 120 KB performance budget.
+
+5. ASSET: Favicon & App Icons
+   - File: NONE ON DISK
+   - Type: [MISSING ASSET]
+   - Subject/Purpose: Browser tab icon, bookmark icon, PWA web clip icon.
+   - Current Usage: No favicon linked in `base.njk`.
+   - Restrictions/Notes: Favicon generation needed once official logo is provided.
+
+6. ASSET: Open Graph Social Share Card
+   - File: NONE ON DISK
+   - Type: [MISSING ASSET]
+   - Subject/Purpose: 1200x630px social media preview card for WhatsApp and Facebook sharing.
+   - Current Usage: `site.json` marks `launch.ogImageConsent: false`. No `og:image` tag rendered.
+
+================================================================================
+3. CONTENT INTEGRITY AUDIT: VERIFIED vs PLACEHOLDER vs MISSING
+================================================================================
+
+To ensure total transparency during redesign, every content element is categorized below:
+
+A. VERIFIED & CLIENT-ALIGNED CONTENT:
+- School Name: "Feather Touch Foundation School and Day Care Centre"
+- Short Name: "Feather Touch"
+- Tagline: "Nurturing Little Minds, Building Strong Foundations."
+- Academic Offerings: Play Group, Nursery, Kindergarten 1 (KG 1), Kindergarten 2 (KG 2), Day Care Centre.
+- Target Session: Admissions Open — Session 2026–27.
+- Educational Philosophy: Rejection of rote learning; emphasis on curiosity, discovery, confidence, and joy.
+- 7 Pedagogical Methods: Activity-Based, Experiential, Role Play, Story-Based, Music & Movement, Art & Creativity, Nature & Environmental Learning.
+- 6 Developmental Areas: Cognitive, Language, Physical, Emotional, Social, Creative Development.
+- 8 Safety & Wellbeing Principles: Personal safety, Safe/unsafe touch, Good/bad behaviour, Respect, Personal boundaries, Asking for help, Healthy habits, Emotional wellbeing.
+- 6 Parent Partnership Pillars: PTMs, Progress discussions, Activity updates, School events, Parent-child activities, Feedback.
+- 19 School Activities: Green Day, Plantation Activities, Healthy Tiffin Day, Guru Purnima, Colouring, Fancy Dress, Rakhi Making, Janmashtami, Ganesh Chaturthi, Fireless Cooking, Gandhi Jayanti, Community Helpers, Diwali, Children's Day, Poem Recitation, Christmas, Storytelling, Republic Day, Sports Activities.
+- 6 Student Recognition Categories: Star Attendance, Star Academics, Well-Mannered Star, Star Participant, Star in Uniform, Star in Punctuality.
+- 6 Core FAQ Items: Basic programme availability, methodology, and visit policy.
+
+B. PLACEHOLDER CONTENT (Currently Rendered with Placeholders or Draft Notices):
+- Gallery Cards: 3 placeholder containers rendering metadata strings ("Solving a puzzle together in class", Photo ID: classroom-puzzle) because photos are not on disk.
+- Header Logo Mark: Lucide circle checkmark icon used in place of actual school emblem.
+- Contact Cards & Footer Contact Block: Renders draft notices ("Contact number in draft configuration pending client sign-off", "Campus address in draft configuration...", etc.).
+- Admissions Form Submission: Client-side JS prevents post and shows mock success text ("Thank you! Your enquiry has been received in preview mode...").
+- Development Preview Banners: Golden alert banners at top of site and below gallery reminding viewers that client sign-off is pending.
+
+C. MISSING CONTENT (Null in Data Files or Unsupplied):
+- Primary Phone Number (Display format and E.164 dial format).
+- WhatsApp Number (Display format and raw digits for wa.me link).
+- Official Email Address.
+- Complete Campus Street Address (Street, locality, city, state/region, postal code).
+- Google Maps Embed Link and Directions URL.
+- School Operating Hours (Class hours, office hours, visitor walkthrough hours).
+- Day Care Specifics: Age eligibility, daily timings, meal provision policy, pickup schedule.
+- Daily Routine Timestamps: Specific clock hours for Circle Time, Snack, Outdoor play, etc.
+- Programme Eligibility: Age cutoffs (e.g. 2+ years for Play Group, 3+ for Nursery) and batch shifts.
+- Admission Documentation List: List of certificates/forms required for registration.
+- Verified Parent Testimonials (Currently 0 items).
+- Educator / Team Profiles (Currently 0 items).
+- Official Privacy Policy text and Legal Disclaimers.
+- Real school photography files and signed parent consent records.
+- Form endpoint URL or backend delivery integration.
+
+D. NEEDS VERIFICATION:
+- Age criteria for Session 2026–27 admissions.
+- Timings for extended Day Care (e.g. full-day vs half-day vs hourly).
+- Whether meal/snack provision is provided by school or sent by parents in tiffin.
+- Exact postal code and district for the school campus.
+
+================================================================================
+4. CONTENT INTEGRITY NOTES FOR REDESIGN
+================================================================================
+
+1. DO NOT INVENT CONTACT DETAILS:
+   Never inject sample phone numbers (e.g. +91 99999 99999) or fake addresses. Keep the draft conditional logic (`{% if site.contact.phoneDisplay %}`) so that fallback messaging displays cleanly until authentic data is entered.
+
+2. DO NOT USE GENERIC STOCK PHOTOS WITHOUT APPROVAL:
+   Because child safety and trust are core institutional pillars of Feather Touch, using generic unverified stock imagery can mislead parents and violate privacy guidelines. The redesign should create high-aesthetic, warm placeholder treatments (illustrations, iconography, or subtle abstract patterns) until official photos with verified consent are provided.
+
+3. PRESERVE CURRICULUM INTEGRITY:
+   The list of 7 teaching methods, 6 developmental dimensions, 8 safety topics, and 19 celebrations represent real curriculum activities practiced by the school. These must remain intact and prominently featured.
+
+================================================================================
+END OF CONTENT & ASSET MAP DOCUMENT
+================================================================================

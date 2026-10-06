@@ -1,0 +1,52 @@
+{
+  "name": "Feather Touch Foundation School and Day Care Centre",
+  "shortName": "Feather Touch",
+  "tagline": "Nurturing Little Minds, Building Strong Foundations.",
+  "url": null,
+  "contact": {
+    "phoneDisplay": null,
+    "phoneE164": null,
+    "whatsappDisplay": null,
+    "whatsappDigits": null,
+    "email": null
+  },
+  "address": {
+    "streetAddress": null,
+    "locality": null,
+    "city": null,
+    "region": null,
+    "postalCode": null,
+    "country": null
+  },
+  "mapsUrl": null,
+  "mapsEmbedUrl": null,
+  "hours": {
+    "school": null,
+    "office": null,
+    "visiting": null
+  },
+  "admissions": {
+    "sessionLabel": null,
+    "completionText": null,
+    "documents": []
+  },
+  "visit": {
+    "whatToExpect": null
+  },
+  "safety": {
+    "practices": []
+  },
+  "forms": {
+    "delivery": "none",
+    "endpoint": null,
+    "extraFields": {},
+    "responseTimeText": null
+  },
+  "social": [],
+  "launch": {
+    "contentSignOff": false,
+    "privacyPolicyApproved": false,
+    "logoSupplied": false,
+    "ogImageConsent": false
+  }
+}

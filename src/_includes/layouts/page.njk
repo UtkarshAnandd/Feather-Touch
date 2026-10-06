@@ -1,0 +1,14 @@
+---
+layout: layouts/base.njk
+---
+<main id="main-content">
+  <div class="container section">
+    {% block pageHeader %}
+      {% if title %}
+        <h1>{{ title }}</h1>
+      {% endif %}
+    {% endblock %}
+
+    {{ content | safe }}
+  </div>
+</main>

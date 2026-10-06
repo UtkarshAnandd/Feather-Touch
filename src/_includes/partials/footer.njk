@@ -1,0 +1,76 @@
+<footer class="site-footer" id="site-footer">
+  <div class="container footer__container">
+    <div class="footer__grid">
+      <div class="footer__brand-col">
+        <h3 class="footer__brand-title">{{ site.name }}</h3>
+        <p class="footer__tagline">{{ site.tagline }}</p>
+        <p class="footer__desc">
+          A nurturing early childhood learning and day care centre dedicated to holistic foundational development through play, discovery, and safety.
+        </p>
+        {% if build.mode != "production" %}
+          <div class="footer__status-note">
+            <svg class="icon icon--alert" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-alert"></use></svg>
+            <span>Draft Configuration — Verified details will be published upon launch sign-off.</span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="footer__nav-col">
+        <h4 class="footer__col-title">Quick Links</h4>
+        <ul class="footer__links">
+          <li><a href="#about">About Our Philosophy</a></li>
+          <li><a href="#programmes">Foundational Programmes</a></li>
+          <li><a href="#daycare">Day Care Services</a></li>
+          <li><a href="#learning">How Children Learn</a></li>
+          <li><a href="#routine">Daily Sequence</a></li>
+          <li><a href="#activities">Events &amp; Activities</a></li>
+          <li><a href="#safety">Safety &amp; Wellbeing</a></li>
+          <li><a href="#gallery">School Gallery</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__nav-col">
+        <h4 class="footer__col-title">Programmes</h4>
+        <ul class="footer__links">
+          <li><a href="#programmes">Play Group</a></li>
+          <li><a href="#programmes">Nursery</a></li>
+          <li><a href="#programmes">Kindergarten 1 (KG 1)</a></li>
+          <li><a href="#programmes">Kindergarten 2 (KG 2)</a></li>
+          <li><a href="#daycare">Extended Day Care</a></li>
+          <li><a href="#admissions">Admissions Enquiry</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__contact-col">
+        <h4 class="footer__col-title">Connect</h4>
+        <div class="footer__contact-info">
+          {% if site.contact.phoneDisplay %}
+            <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-phone"></use></svg> <a href="tel:{{ site.contact.phoneE164 }}">{{ site.contact.phoneDisplay }}</a></p>
+          {% else %}
+            <p class="text-muted"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-phone"></use></svg> <em>Phone pending client sign-off</em></p>
+          {% endif %}
+
+          {% if site.contact.email %}
+            <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-mail"></use></svg> <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></p>
+          {% else %}
+            <p class="text-muted"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-mail"></use></svg> <em>Email pending client sign-off</em></p>
+          {% endif %}
+
+          {% if site.address.streetAddress %}
+            <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-map-pin"></use></svg> {{ site.address.streetAddress }}, {{ site.address.locality }}</p>
+          {% else %}
+            <p class="text-muted"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-map-pin"></use></svg> <em>Address pending client sign-off</em></p>
+          {% endif %}
+        </div>
+        <div class="footer__admissions-box">
+          <a href="#admissions" class="btn btn--primary btn--block">Enquire for Admissions</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>&copy; 2026 {{ site.name }}. All rights reserved.</p>
+      <p class="footer__credits">Built with care for little minds.</p>
+    </div>
+  </div>
+</footer>

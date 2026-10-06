@@ -1,0 +1,70 @@
+{
+  "primary": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about/"
+    },
+    {
+      "label": "Programmes",
+      "url": "/programmes/"
+    },
+    {
+      "label": "Day Care",
+      "url": "/day-care/"
+    },
+    {
+      "label": "Activities",
+      "url": "/activities/"
+    },
+    {
+      "label": "Child Safety",
+      "url": "/safety/"
+    },
+    {
+      "label": "Admissions",
+      "url": "/admissions/"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    }
+  ],
+  "cta": {
+    "label": "Enquire Now",
+    "url": "/admissions/#enquire"
+  },
+  "footer": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about/"
+    },
+    {
+      "label": "Programmes",
+      "url": "/programmes/"
+    },
+    {
+      "label": "Day Care",
+      "url": "/day-care/"
+    },
+    {
+      "label": "Activities",
+      "url": "/activities/"
+    },
+    {
+      "label": "Admissions",
+      "url": "/admissions/"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    }
+  ]
+}

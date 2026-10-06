@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Eleventy output
+_site/
+
+# Test output
+test-results/
+playwright-report/
+
+# Cache
+.cache/
+# macOS
+.DS_Store

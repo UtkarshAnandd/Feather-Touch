@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if title %}{{ title }} | {% endif %}{{ site.name }}</title>
+  <meta name="description" content="{{ description or site.tagline }}">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% include "partials/icons.njk" %}
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  {% if build.mode != "production" %}
+    <aside class="preview-banner" role="status" aria-label="Development preview banner">
+      <div class="container">
+        <strong>Preview Mode:</strong> Contact details, imagery consent, and legal disclosures are in draft configuration pending client sign-off.
+      </div>
+    </aside>
+  {% endif %}
+
+  {% include "partials/header.njk" %}
+
+  <main id="main-content">
+    {{ content | safe }}
+  </main>
+
+  {% include "partials/footer.njk" %}
+
+  <script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<header class="site-header" id="site-header">
+  <div class="container nav-container">
+    <a href="#home" class="brand" aria-label="{{ site.name }} - Home">
+      <div class="brand__mark" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24">
+          <use href="#icon-circle-check"></use>
+        </svg>
+      </div>
+      <div class="brand__text">
+        <span class="brand__title">{{ site.shortName }}</span>
+        <span class="brand__subtitle">Foundation School &amp; Day Care</span>
+      </div>
+    </a>
+
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu">
+      <svg class="icon icon--menu" viewBox="0 0 24 24" aria-hidden="true">
+        <use href="#icon-menu"></use>
+      </svg>
+      <svg class="icon icon--close" viewBox="0 0 24 24" aria-hidden="true" style="display: none;">
+        <use href="#icon-x"></use>
+      </svg>
+    </button>
+
+    <nav class="nav" id="primary-nav" aria-label="Main Navigation">
+      <ul class="nav__list">
+        <li><a href="#about" class="nav__link">About</a></li>
+        <li><a href="#programmes" class="nav__link">Programmes</a></li>
+        <li><a href="#daycare" class="nav__link">Day Care</a></li>
+        <li><a href="#learning" class="nav__link">Learning</a></li>
+        <li><a href="#routine" class="nav__link">Daily Routine</a></li>
+        <li><a href="#activities" class="nav__link">Activities</a></li>
+        <li><a href="#safety" class="nav__link">Safety</a></li>
+        <li><a href="#gallery" class="nav__link">Gallery</a></li>
+        <li><a href="#faq" class="nav__link">FAQ</a></li>
+        <li><a href="#contact" class="nav__link">Contact</a></li>
+      </ul>
+      <div class="nav__cta">
+        <a href="#admissions" class="btn btn--primary btn--sm">Admissions</a>
+      </div>
+    </nav>
+  </div>
+</header>

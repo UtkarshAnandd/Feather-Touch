@@ -1,0 +1,108 @@
+{
+  "lead": "Feather Touch Foundation School and Day Care Centre is a nurturing early childhood education centre dedicated to providing quality foundational education in a safe, caring and stimulating environment.",
+  "paragraphs": [
+    "Our school caters to young learners during their most important developmental years through a combination of play-based learning, structured classroom experiences, creative activities and social interaction.",
+    "We believe that education at this stage should not be about pressure or rote learning. It should be about curiosity, discovery, confidence and joy."
+  ],
+  "vision": "To create a happy, safe and stimulating learning environment where every child gets the opportunity to discover their potential, develop confidence and build strong foundations for lifelong learning.",
+  "mission": [
+    "To provide quality early childhood education.",
+    "To nurture every child's individual strengths and interests.",
+    "To make learning joyful, experiential and meaningful.",
+    "To develop communication, creativity and problem-solving skills.",
+    "To promote positive social behaviour and emotional development.",
+    "To create awareness about kindness, respect, responsibility and safety.",
+    "To build a strong partnership between school and parents."
+  ],
+  "approach": {
+    "header": "We Believe Children Learn Best When They Are Happy.",
+    "lead": "At Feather Touch, classrooms are not just places where children sit and listen. They are spaces where children explore, experiment, ask questions, create and discover.",
+    "methods": [
+      {
+        "name": "Activity-Based Learning",
+        "text": "Children understand concepts through activities and real-life experiences."
+      },
+      {
+        "name": "Experiential Learning",
+        "text": "We encourage children to learn by doing."
+      },
+      {
+        "name": "Role Play",
+        "text": "Role play develops imagination, communication and confidence."
+      },
+      {
+        "name": "Story-Based Learning",
+        "text": "Stories make language, values and concepts easier and more enjoyable to understand."
+      },
+      {
+        "name": "Music & Movement",
+        "text": "Rhymes, songs and movement support language, memory and physical development."
+      },
+      {
+        "name": "Art & Creativity",
+        "text": "Creative activities help children express ideas and emotions."
+      },
+      {
+        "name": "Nature & Environmental Learning",
+        "text": "Children are encouraged to observe and understand the world around them."
+      }
+    ]
+  },
+  "development": {
+    "lead": "At Feather Touch, we guide young minds across all essential dimensions of early growth.",
+    "areas": [
+      {
+        "name": "Cognitive Development",
+        "text": "Thinking, observation, reasoning and problem-solving."
+      },
+      {
+        "name": "Language Development",
+        "text": "Listening, speaking, vocabulary and early literacy."
+      },
+      {
+        "name": "Physical Development",
+        "text": "Balance, coordination, movement and motor skills."
+      },
+      {
+        "name": "Emotional Development",
+        "text": "Confidence, self-expression and emotional awareness."
+      },
+      {
+        "name": "Social Development",
+        "text": "Sharing, cooperation, empathy and positive relationships."
+      },
+      {
+        "name": "Creative Development",
+        "text": "Imagination, artistic expression and innovation."
+      }
+    ]
+  },
+  "safety": {
+    "heading": "A Safe Childhood is the First Step Towards a Strong Future",
+    "lead": "At Feather Touch, the safety and well-being of every child is a fundamental priority.",
+    "topics": [
+      "Personal safety",
+      "Safe and unsafe touch",
+      "Good and bad behaviour",
+      "Respect for others",
+      "Personal boundaries",
+      "Asking for help",
+      "Healthy habits",
+      "Emotional well-being"
+    ],
+    "commitmentNote": "We also believe that child protection is a shared responsibility between school, parents and the community."
+  },
+  "partnership": {
+    "heading": "Parents + Teachers = Stronger Foundations",
+    "lead": "A child's development becomes stronger when parents and teachers work together.",
+    "items": [
+      "Parent-Teacher Meetings",
+      "Progress discussions",
+      "Activity updates",
+      "School events",
+      "Parent-child activities",
+      "Feedback and interaction"
+    ],
+    "closing": "Together, We Help Children Grow."
+  }
+}

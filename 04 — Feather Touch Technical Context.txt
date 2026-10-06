@@ -1,0 +1,609 @@
+================================================================================
+FEATHER TOUCH FOUNDATION SCHOOL & DAY CARE CENTRE
+TECHNICAL ARCHITECTURE & IMPLEMENTATION CONTEXT
+================================================================================
+Document: 04 — Feather Touch Technical Context.txt
+Repository: /Users/utkarsh/NGO-Work
+Branch: feat/redesign-foundation (Git Commit: 52ceb76)
+Analysis Date: September 2026
+Purpose: Read-only architectural, technical, and implementation context package
+for Claude Project visual and UX redesign.
+================================================================================
+
+--------------------------------------------------------------------------------
+1. REPOSITORY STRUCTURE & CODEBASE DUALITY
+--------------------------------------------------------------------------------
+
+The repository contains two distinct architectural states:
+A. The active modern Eleventy (11ty v3) static site architecture located in `src/`.
+B. An earlier single-page prototype in the root directory (`index.html`, `styles.css`, `script.js`, `config.js`).
+
+The project build system, launch scripts, and active development target `src/`. The root prototype files represent the legacy phase before the Eleventy refactor.
+
+Concise Architecture Map:
+-------------------------
+Feather-Touch/
+├── .gitignore                      # Excludes node_modules/, _site/, test-results/, .cache/
+├── .nvmrc                          # Node.js version requirement (v22)
+├── package.json                    # Scripts and dependencies (Eleventy v3.1.0, Playwright, Axe)
+├── package-lock.json               # Locked dependency tree
+├── eleventy.config.js              # Eleventy configuration (passthrough copies, input/output paths)
+├── README.md                       # Project overview and curriculum documentation
+├── scripts/                        # Automated CI / build validation scripts
+│   ├── check-launch-gate.mjs       # Pre-build gate verifying 12 required site data fields
+│   └── check-budgets.mjs           # Post-build gate checking file size budgets
+├── src/                            # ACTIVE ELEVENTY SOURCE DIRECTORY
+│   ├── index.njk                   # Homepage template (14 content sections)
+│   ├── _includes/
+│   │   ├── layouts/
+│   │   │   ├── base.njk            # Base HTML5 document shell, meta, skip-link, preview banner
+│   │   │   └── page.njk            # Generic inner page layout (wraps content in container)
+│   │   └── partials/
+│   │       ├── header.njk          # Sticky navigation bar with mobile toggle and admissions CTA
+│   │       ├── footer.njk          # 4-column footer with school info, quick links, contact
+│   │       └── icons.njk           # Inline SVG symbol sprite (Lucide-based icons)
+│   ├── _data/                      # Structured JSON and JS data sources (15 files)
+│   │   ├── about.json              # Lead, vision, mission, approach, developmental areas, safety, partnership
+│   │   ├── activities.json         # Array of 19 school activities and celebrations
+│   │   ├── build.js                # Exposes build mode ("preview" vs "production") and current year
+│   │   ├── dayCare.json            # Day care feature set, quote, lead, and null operational fields
+│   │   ├── daySequence.json        # 9-step daily routine sequence (timings currently null)
+│   │   ├── faq.json                # 6 FAQ items with questions, answers, categorization
+│   │   ├── gallery.json            # Empty array `[]`
+│   │   ├── images.json             # 3 descriptive photo metadata records (consent pending)
+│   │   ├── navigation.json         # Route definitions (defines primary and footer multi-page routes)
+│   │   ├── people.json             # Empty array `[]`
+│   │   ├── programmes.json         # 4 academic programmes (Play Group, Nursery, KG 1, KG 2)
+│   │   ├── recognition.json        # Star student recognition categories and philosophy
+│   │   ├── site.js                 # Site data loader (reads site.json or SITE_DATA_FILE env var)
+│   │   ├── site.json               # Central school metadata, contact, address, hours, launch flags
+│   │   └── testimonials.json       # Empty array `[]`
+│   └── assets/
+│       ├── css/
+│       │   └── main.css            # 1,588-line CSS @layer architecture (tokens, layout, components)
+│       ├── js/
+│       │   └── main.js             # Client ES module (mobile nav toggle + preview enquiry handler)
+│       ├── fonts/                  # Self-hosted WOFF2 web fonts + OFL licenses
+│       │   ├── bricolage-grotesque-600.woff2
+│       │   ├── bricolage-grotesque-700.woff2
+│       │   ├── atkinson-hyperlegible-next-400.woff2
+│       │   ├── atkinson-hyperlegible-next-600.woff2
+│       │   ├── OFL-bricolage-grotesque.txt
+│       │   └── OFL-atkinson-hyperlegible-next.txt
+│       ├── icons/
+│       │   └── LICENSE-lucide.txt  # Lucide icon license documentation
+│       └── images/
+│           └── source/
+│               └── .gitkeep        # Directory for authentic client images (no image files present)
+├── _site/                          # COMPILED BUILD OUTPUT (generated by Eleventy)
+│   ├── index.html                  # Generated 63KB static homepage
+│   └── assets/                     # Copied CSS, JS, fonts, icon licenses
+└── [Legacy Root Prototype Files]    # Earlier uncompiled prototype
+    ├── index.html                  # 1,944-line standalone prototype HTML
+    ├── styles.css                  # 2,198-line standalone CSS
+    ├── script.js                   # 443-line prototype JS (modals, tabs, drawer, observer)
+    ├── config.js                   # Client-side configuration object window.FEATHER_TOUCH_CONFIG
+    └── assets/                     # Empty subdirectories (icons/, images/placeholders/)
+
+Excluded from Analysis:
+- `node_modules/` (dependencies)
+- `.git/` (git internal database)
+
+--------------------------------------------------------------------------------
+2. CURRENT ARCHITECTURE
+--------------------------------------------------------------------------------
+
+Build System:
+- Eleventy (11ty) version 3.1.0 (@11ty/eleventy)
+- Module System: ECMAScript Modules (`"type": "module"` in package.json)
+- Runtime Requirement: Node.js >= 22 (enforced by `.nvmrc` and `engines.node`)
+- Configuration File: `eleventy.config.js`
+  - Input directory: `src`
+  - Output directory: `_site`
+  - Includes directory: `_includes`
+  - Data directory: `_data`
+  - Template formats: `njk`, `md`, `html`
+  - Template engines: HTML template engine `njk`, Markdown template engine `njk`
+  - Passthrough copies:
+    - `src/assets/css` -> `_site/assets/css`
+    - `src/assets/fonts` -> `_site/assets/fonts`
+    - `src/assets/js` -> `_site/assets/js`
+    - `src/assets/icons` -> `_site/assets/icons`
+  - Path Prefix: Configurable via `process.env.PATH_PREFIX || "/"`
+
+Templating & Rendering:
+- Nunjucks (`.njk`) engine handles templating.
+- Layout inheritance: `src/index.njk` uses `layout: layouts/base.njk`.
+- Partials inclusion:
+  - `{% include "partials/icons.njk" %}` in base layout.
+  - `{% include "partials/header.njk" %}` in base layout.
+  - `{% include "partials/footer.njk" %}` in base layout.
+- Layouts available:
+  - `src/_includes/layouts/base.njk`: Contains `<!DOCTYPE html>`, `<head>`, skip-link, preview-banner, `<main id="main-content">`, header, footer, script tags.
+  - `src/_includes/layouts/page.njk`: Extends `base.njk`, adds an inner container and `{% block pageHeader %}`. (Note: Currently `page.njk` nests a second `<main id="main-content">` inside the outer `<main>` of `base.njk` if used).
+
+CSS Architecture:
+- Implemented in a single stylesheet: `src/assets/css/main.css` (1,588 lines, 37.9 KB).
+- Structured into explicit CSS Cascade Layers:
+  `@layer reset, tokens, base, layout, components, utilities;`
+  - `@layer reset`: Modern reset (box-sizing border-box, smooth scrolling, image fluid widths, zero margin/padding).
+  - `@layer tokens`: Self-hosted `@font-face` definitions, CSS custom properties for palette, typography scale, spacing scale, border radii, shadows, layout constraints, transitions, and focus rings.
+  - `@layer base`: Semantic element defaults, heading scale with CSS `clamp()`, skip-link, keyboard focus styling (`:focus-visible`).
+  - `@layer layout`: `.container` (max-width 1200px, 20px padding), responsive `.grid` utility classes, `.section` padding.
+  - `@layer components`: Buttons (`.btn`, `.btn--primary`, `.btn--secondary`), cards, badges, trust-pills, banners, forms, FAQ details/summary styling, gallery placeholders, footer components.
+  - `@layer utilities`: Text alignments, color utilities, display helpers, icon sizing.
+  - `@media (prefers-reduced-motion: reduce)`: Overrides transitions and animations to 0.01ms for accessible motion reduction.
+
+JavaScript Architecture:
+- Native ES module: `src/assets/js/main.js` (62 lines, 2.2 KB).
+- Loaded as `<script type="module" src="/assets/js/main.js"></script>` at bottom of `base.njk`.
+- Lightweight responsibilities:
+  1. Mobile navigation menu toggle (`#nav-toggle` toggles `#primary-nav.nav--open` and updates `aria-expanded`).
+  2. Mobile navigation auto-close on link click.
+  3. Admission enquiry form preview interaction (intercepts submit, checks honeypot field `extra_notes`, displays `#form-feedback` confirmation message, resets form).
+- No third-party runtime JavaScript dependencies (zero external frameworks).
+
+Build Process & Commands:
+- Development Server:
+  `npm run dev` -> runs `eleventy --serve`
+- Preview Build:
+  `npm run build` -> runs `SITE_MODE=preview eleventy`
+- Production Build:
+  `npm run build:production` -> runs:
+  `node scripts/check-launch-gate.mjs && SITE_MODE=production eleventy && node scripts/check-budgets.mjs`
+- Test Suite:
+  `npm run test` -> configured as `playwright test` (Playwright and Axe installed in devDependencies; tests not yet authored).
+
+Quality Gates & Automated Budget Checks:
+1. `scripts/check-launch-gate.mjs`:
+   Validates 12 mandatory fields in `src/_data/site.json` before allowing a production build. If any field is missing or false, the build terminates with exit code 1.
+2. `scripts/check-budgets.mjs`:
+   Enforces strict size budgets on compiled `_site/` output:
+   - HTML per page <= 75 KB (Compiled `index.html` is ~63 KB)
+   - CSS main <= 50 KB (`main.css` is ~37.9 KB)
+   - Total JavaScript <= 40 KB (`main.js` is ~2.2 KB)
+   - Total Fonts <= 120 KB (4 WOFF2 fonts total ~68 KB)
+
+Deployment Assumptions:
+- Output directory is `_site/`.
+- Fully static, serverless-ready HTML/CSS/JS output.
+- Can deploy directly to Netlify, Vercel, Cloudflare Pages, or GitHub Pages.
+- Environment variables recognized:
+  - `SITE_MODE`: "production" vs "preview" (defaults to "preview").
+  - `PATH_PREFIX`: sets subpath root (defaults to "/").
+  - `SITE_DATA_FILE`: custom path to site json (used in CI/testing).
+
+--------------------------------------------------------------------------------
+3. PAGE / SECTION INVENTORY (HOMEPAGE — src/index.njk)
+--------------------------------------------------------------------------------
+
+The site is currently structured as a comprehensive, accessible single-page layout with in-page anchor navigation. Every section is implemented in `src/index.njk` (with header and footer partials in `src/_includes/partials/`).
+
+Below is the complete section-by-section inventory:
+
+1. SECTION: Header & Navigation
+   - Template/Partial: `src/_includes/partials/header.njk`
+   - Data Source: `src/_data/site.json` (`site.name`, `site.shortName`)
+   - Important Assets: SVG `#icon-circle-check` (used as brand mark placeholder), SVG `#icon-menu`, SVG `#icon-x`
+   - Interactions: Mobile hamburger button (`#nav-toggle`) toggles menu dropdown; links close menu on click.
+   - Notes: Navigation links are hardcoded in `header.njk` to anchor IDs: `#about`, `#programmes`, `#daycare`, `#learning`, `#routine`, `#activities`, `#safety`, `#gallery`, `#faq`, `#contact`, with CTA to `#admissions`. (Does NOT consume `navigation.json` directly).
+
+2. SECTION: Hero Section
+   - Template/Partial: `src/index.njk` (Lines 9–69, `<section class="hero-section" id="home">`)
+   - Data Source: `src/_data/site.json` (`site.name`)
+   - Important Assets: SVG `#icon-circle-check`
+   - Interactions: CTAs link to `#admissions`, `#programmes`, and `#contact`.
+   - Notes: Two-column layout on desktop: Left column contains gold admission badge ("Admissions Open • Session 2026–27"), headline ("Nurturing Little Minds, Building Strong Foundations"), lead copy, dual CTA buttons, and 3 trust pills. Right column features a structured `.welcome-box` card summarizing holistic development, experiential learning, and campus visit scheduling.
+
+3. SECTION: About Us / Why Feather Touch
+   - Template/Partial: `src/index.njk` (Lines 74–108, `<section class="section bg-ivory" id="about">`)
+   - Data Source: `src/_data/about.json` (`about.lead`, `about.paragraphs`, `about.vision`, `about.mission`)
+   - Important Assets: SVG `#icon-circle-check`
+   - Interactions: None (static content display).
+   - Notes: Two-column layout: Left column contains introductory narrative paragraphs and a highlighted `.vision-card`. Right column contains a framed `.mission-box` with a 7-item checkmarked mission list.
+
+4. SECTION: Programmes
+   - Template/Partial: `src/index.njk` (Lines 113–154, `<section class="section bg-card" id="programmes">`)
+   - Data Source: `src/_data/programmes.json` (iterates over 4 programmes)
+   - Important Assets: None (text and badge cards).
+   - Interactions: "Enquire for [Programme]" button on each card links to `#admissions`.
+   - Notes: Renders a 4-column responsive grid of programme cards (Play Group, Nursery, KG 1, KG 2). Each card displays programme badge, name, tagline, list of developmental focus areas as pill tags (`.focus-pill`), and an enquiry CTA. Bottom note indicates 2026–27 session open.
+
+5. SECTION: Day Care Centre
+   - Template/Partial: `src/index.njk` (Lines 159–189, `<section class="section bg-warm" id="daycare">`)
+   - Data Source: `src/_data/dayCare.json` (`dayCare.heading`, `dayCare.lead`, `dayCare.quote`, `dayCare.includes`)
+   - Important Assets: SVG `#icon-circle-check`
+   - Interactions: Primary CTA button links to `#admissions`.
+   - Notes: Rendered as a prominent framed banner (`.daycare-banner`) on warm ivory background. Displays headline, lead paragraph, italicized quote ("Because Your Child Deserves Care That Feels Like Home"), a 2-column list of 8 day care inclusions, and an enquiry button.
+
+6. SECTION: How Children Learn (Approach & Developmental Areas)
+   - Template/Partial: `src/index.njk` (Lines 194–235, `<section class="section bg-card" id="learning">`)
+   - Data Source: `src/_data/about.json` (`about.approach`, `about.development`)
+   - Important Assets: SVG `#icon-circle-check`
+   - Interactions: Hover transition on method cards and growth cards.
+   - Notes: Divided into two subsections:
+     a) Pedagogy / Teaching Methods: 7 method cards (Activity-Based, Experiential, Role Play, Story-Based, Music & Movement, Art & Creativity, Nature/Environmental).
+     b) Child Development Dimensions: 6 growth cards (Cognitive, Language, Physical, Emotional, Social, Creative).
+
+7. SECTION: A Day at Feather Touch (Daily Routine)
+   - Template/Partial: `src/index.njk` (Lines 240–262, `<section class="section bg-ivory" id="routine">`)
+   - Data Source: `src/_data/daySequence.json` (9 routine steps)
+   - Important Assets: Numbered step circles (1 through 9).
+   - Interactions: None (vertical timeline sequence).
+   - Notes: Displays 9 sequential steps in a vertical list with circular step numbers. Exact clock timings are not rendered because `time: null` in the data file.
+
+8. SECTION: Activities & Life at Feather Touch
+   - Template/Partial: `src/index.njk` (Lines 267–304, `<section class="section bg-card" id="activities">`)
+   - Data Source: `src/_data/activities.json` (19 activities), `src/_data/recognition.json`
+   - Important Assets: SVG `#icon-circle-check` (gold variant)
+   - Interactions: Pill hover transitions.
+   - Notes: First half displays an activity cloud (`.activities-cloud`) of 19 rounded chips with indicator dots. Second half features a dedicated Student Recognition card (`.recognition-box`) highlighting effort celebration across 6 award categories.
+
+9. SECTION: Safety & Wellbeing
+   - Template/Partial: `src/index.njk` (Lines 309–334, `<section class="section bg-cool" id="safety">`)
+   - Data Source: `src/_data/about.json` (`about.safety.heading`, `about.safety.lead`, `about.safety.topics`, `about.safety.commitmentNote`)
+   - Important Assets: SVG `#icon-circle-check`
+   - Interactions: None.
+   - Notes: Displays 8 safety topic cards in a responsive grid (Personal safety, Safe and unsafe touch, Good/bad behaviour, Respect, Boundaries, Asking for help, Healthy habits, Emotional wellbeing). Concludes with a commitment statement on shared responsibility.
+
+10. SECTION: Parent Partnership
+    - Template/Partial: `src/index.njk` (Lines 338–362, `<section class="section bg-ivory" id="partnership">`)
+    - Data Source: `src/_data/about.json` (`about.partnership`)
+    - Important Assets: SVG `#icon-circle-check`
+    - Interactions: None.
+    - Notes: Contained card highlighting 6 collaborative touchpoints (PTMs, Progress discussions, Activity updates, School events, Parent-child activities, Feedback) with closing quote "Together, We Help Children Grow."
+
+11. SECTION: Gallery (Moments at Feather Touch)
+    - Template/Partial: `src/index.njk` (Lines 366–401, `<section class="section bg-card" id="gallery">`)
+    - Data Source: `src/_data/images.json` (3 entries), `src/_data/build.js` (`build.mode`)
+    - Important Assets: Rendered placeholder cards (no actual JPEG files). SVG `#icon-circle-alert` for preview notice.
+    - Interactions: Visual card display only. No lightbox or modal hooked up.
+    - Notes: Loops through `images.json`. Renders a placeholder block for each record displaying Category badge, Caption, and Photo ID (`Photo ID: classroom-puzzle`, etc.). If `build.mode != "production"`, renders a preview warning banner explaining that photo consent verification is in progress.
+
+12. SECTION: Testimonials (Parent Feedback)
+    - Template/Partial: `src/index.njk` (Lines 406–423, `<section class="section bg-warm" id="testimonials">`)
+    - Data Source: `src/_data/testimonials.json`
+    - Important Assets: None.
+    - Interactions: None.
+    - Notes: WRAPPED IN CONDITIONAL: `{% if testimonials and testimonials.length > 0 %}`. Because `testimonials.json` is currently `[]`, THIS SECTION IS COMPLETELY HIDDEN in the compiled HTML.
+
+13. SECTION: Admissions & Enquiry Form
+    - Template/Partial: `src/index.njk` (Lines 428–539, `<section class="section bg-ivory" id="admissions">`)
+    - Data Source: Static copy in template (Session 2026–27).
+    - Important Assets: Step badges 1–4.
+    - Interactions: Form submission handled by `main.js`. Form fields: Parent Name (required), Phone/WhatsApp (required), Email, Child Name, Programme of Interest (select dropdown, required), Questions/Message (textarea). Honeypot field `extra_notes` for anti-spam.
+    - Notes: Two-column layout: Left column presents the 4-step admission journey (Enquiry, Campus Visit, Enrolment, Welcome). Right column embeds `#enquiry-form`. Submitting shows in-page preview acknowledgment (no backend network transmission).
+
+14. SECTION: FAQ Section
+    - Template/Partial: `src/index.njk` (Lines 544–566, `<section class="section bg-card" id="faq">`)
+    - Data Source: `src/_data/faq.json` (6 items)
+    - Important Assets: SVG `#icon-chevron-down`
+    - Interactions: Native browser HTML `<details>` and `<summary>` disclosure widget. Clicking toggles item, rotates chevron 180deg via CSS. Zero JavaScript required.
+    - Notes: Max-width container (860px). Displays 6 questions covering classes, day care, teaching methodology, extracurriculars, enquiries, and campus visits.
+
+15. SECTION: Contact Us
+    - Template/Partial: `src/index.njk` (Lines 571–622, `<section class="section bg-cool" id="contact">`)
+    - Data Source: `src/_data/site.json` (`site.contact`, `site.address`)
+    - Important Assets: SVG `#icon-phone`, `#icon-mail`, `#icon-map-pin`
+    - Interactions: `tel:`, `mailto:`, and `https://wa.me/` links conditionally rendered when values are present.
+    - Notes: 3 contact cards: Call/WhatsApp, Email Us, Visit School. Because values in `site.json` are currently `null`, each card renders draft fallback notices: e.g. "Contact number in draft configuration pending client sign-off."
+
+16. SECTION: Footer
+    - Template/Partial: `src/_includes/partials/footer.njk`
+    - Data Source: `src/_data/site.json`, `src/_data/build.js`
+    - Important Assets: SVG `#icon-phone`, `#icon-mail`, `#icon-map-pin`, `#icon-circle-alert`
+    - Interactions: Anchor navigation links.
+    - Notes: 4-column layout:
+      - Column 1: School brand, tagline, description, preview status note.
+      - Column 2: Quick links to philosophy, programmes, routine, etc.
+      - Column 3: Direct programme links.
+      - Column 4: Contact details (with draft fallbacks) and Admissions CTA button.
+      - Bottom bar: Copyright 2026 and credits.
+
+--------------------------------------------------------------------------------
+4. CURRENT UI IMPLEMENTATION & DESIGN SYSTEM
+--------------------------------------------------------------------------------
+
+Layout System:
+- CSS Grid and Flexbox exclusively. No third-party grid framework.
+- Main container: `.container` with `max-width: 1200px; padding: 0 20px; margin: 0 auto;`.
+- Section vertical padding: `--space-3xl` (64px) on mobile, `--space-4xl` (96px) on desktop (`>= 768px`).
+- Alternating section backgrounds for rhythm:
+  - `.bg-ivory`: `#FDFBF7` (primary site canvas)
+  - `.bg-card`: `#FFFFFF` (crisp surface contrast)
+  - `.bg-warm`: `#FAF6EE` (warm tint for Day Care and Testimonials)
+  - `.bg-cool`: `#F4F8FA` (cool soft blue-grey for Safety and Contact)
+
+Typography:
+- Heading Font: `'Bricolage Grotesque'`, system-ui, sans-serif. Weights loaded: 600 (Semi-bold), 700 (Bold).
+- Body Font: `'Atkinson Hyperlegible Next'`, system-ui, sans-serif. Weights loaded: 400 (Regular), 600 (Medium).
+- Font Delivery: 100% self-hosted local WOFF2 files with `font-display: swap`. Zero external font requests.
+- Type Scale:
+  - `h1`: `clamp(2rem, 5vw, 3rem)`
+  - `h2`: `clamp(1.75rem, 4vw, 2.25rem)`
+  - `h3`: `clamp(1.35rem, 3vw, 1.875rem)`
+  - `h4`: 1.5rem (24px)
+  - `h5`: 1.25rem (20px)
+  - `h6`: 1.125rem (18px)
+  - Lead text: 1.25rem (20px)
+  - Body text: 1rem (16px, line-height 1.6)
+  - Small / captions: 0.875rem (14px) and 0.75rem (12px)
+
+Color Palette (Tokens defined in :root):
+- Primary Deep Slate Blue:
+  - `--color-primary`: `#1F4E79` (Headings, primary branding, navigation emphasis)
+  - `--color-primary-dark`: `#153756`
+  - `--color-primary-light`: `#EBF3FA` (Pill backgrounds, badge fills)
+  - `--color-primary-soft`: `#D4E5F5` (Subtle borders)
+- Warm Coral Accent:
+  - `--color-accent-coral`: `#E76F51` (Primary CTA buttons, headline highlights)
+  - `--color-accent-coral-light`: `#FDF0ED`
+- Gold / Amber Accent:
+  - `--color-accent-gold`: `#F4A261` (Admission badges, Day Care border, star recognition icons)
+  - `--color-accent-gold-light`: `#FEF7EE`
+- Supporting Accents:
+  - Sage: `--color-accent-sage` `#2A9D8F`, light `#E8F5F3`
+  - Rose: `--color-accent-rose` `#E56B88`, light `#FDEEF2`
+  - Yellow: `--color-accent-yellow` `#E9C46A`
+- Neutral Surfaces & Text:
+  - Main Text: `--color-text-main` `#223243`
+  - Muted Text: `--color-text-muted` `#57687B`
+  - Light Text: `--color-text-light` `#7E90A3`
+  - Inverse Text: `--color-text-inverse` `#FFFFFF`
+  - Borders: `--color-border` `#E8E2D7`, `--color-border-subtle` `#F0ECE4`
+
+Buttons & Interactive Elements:
+- Base class: `.btn` (pill-rounded with `border-radius: 9999px`, font-family Bricolage Grotesque, font-weight 600).
+- `.btn--primary`: Coral background (`#E76F51`), white text, coral border. Hover transitions to `#d85c3e` with glowing drop shadow `box-shadow: 0 4px 14px rgba(231, 111, 81, 0.35)`.
+- `.btn--secondary`: Transparent background, `#1F4E79` border and text. Hover transitions to light blue background (`#EBF3FA`).
+- Modifiers: `.btn--lg` (larger padding), `.btn--sm` (compact nav button), `.btn--block` (full-width for forms).
+
+Cards & Containers:
+- `.programme-card`: Border `#E8E2D7`, border-radius 16px, hover lift `transform: translateY(-4px)`, shadow transition.
+- `.welcome-box`: Card on hero right column with rounded corners, bordered frame, and inner list.
+- `.daycare-banner`: Prominent card with 1.5px gold border (`#F4A261`), 32px border-radius, warm card background.
+- `.method-card`, `.growth-card`, `.safety-card`: Clean rectangular cards with rounded corners (16px), subtle border, icon/badge header.
+- `.admissions-form-box`: Framed card with 1.5px soft primary border, 24px border-radius, card shadow.
+
+Spacing Scale:
+- `--space-xxs`: 4px
+- `--space-xs`: 8px
+- `--space-sm`: 12px
+- `--space-md`: 16px
+- `--space-lg`: 24px
+- `--space-xl`: 32px
+- `--space-2xl`: 48px
+- `--space-3xl`: 64px
+- `--space-4xl`: 96px
+
+Icon System:
+- Inline SVG symbol sprite in `src/_includes/partials/icons.njk`.
+- Icons referenced via `<svg class="icon"><use href="#icon-[name]"></use></svg>`.
+- Derived from Lucide icons (stroke-based, 24x24 viewBox, stroke-width 2, `fill="none"`, `stroke="currentColor"`).
+- Icons available in sprite:
+  `icon-menu`, `icon-x`, `icon-phone`, `icon-message-circle`, `icon-map-pin`, `icon-clock`, `icon-mail`, `icon-circle-alert`, `icon-circle-check`, `icon-external-link`, `icon-chevron-down`.
+
+Forms:
+- Elements styled via `.form-group`, `.form-label`, `.form-control`.
+- Focus state: `border-color: #1F4E79`, `box-shadow: 0 0 0 3px #D4E5F5`.
+- Anti-spam: Invisible honeypot field `.honeypot-field` (`tabindex="-1"`, `autocomplete="off"`, positioned off-screen).
+- Validation feedback container: `#form-feedback` with `aria-live="polite"`.
+
+--------------------------------------------------------------------------------
+5. RESPONSIVE IMPLEMENTATION
+--------------------------------------------------------------------------------
+
+Breakpoints Active in `src/assets/css/main.css`:
+- 480px (`@media (min-width: 480px)`): 2-column grid for small devices (`.grid--2-col-xs`).
+- 600px (`@media (min-width: 600px)`): Footer bottom bar switches from column to row (`justify-content: space-between`).
+- 768px (`@media (min-width: 768px)`):
+  - `.grid--2-col` -> 2 columns
+  - `.grid--3-col` -> 3 columns
+  - `.section` vertical padding expands from 64px to 96px.
+- 860px (`@media (min-width: 860px)`): Max-width container for FAQ reading column.
+- 900px (`@media (min-width: 900px)`):
+  - Hero container switches from 1-column stack to 2-column split (`1.2fr 0.8fr`).
+  - Admissions layout switches from 1-column stack to 2-column split (`0.9fr 1.1fr` for steps vs form).
+- 960px (`@media (max-width: 960px)`): MOBILE NAVIGATION BREAKPOINT:
+  - Desktop menu hides.
+  - Hamburger toggle button (`#nav-toggle`) displays.
+  - `.nav` becomes an absolutely positioned dropdown below the header (`top: 100%`, `left: 0`, `right: 0`, full width, `box-shadow: var(--shadow-card)`).
+  - Navigation links switch to vertical block layout (`flex-direction: column`, width 100%).
+  - Nav CTA button expands to 100% width.
+- 1024px (`@media (min-width: 1024px)`):
+  - `.grid--4-col` activates 4 columns (used by Programmes grid).
+
+Mobile Navigation Behavior:
+- Below 960px, `.nav-toggle` is visible with hamburger icon.
+- Tapping `#nav-toggle` sets `aria-expanded="true"` and adds class `.nav--open` to `#primary-nav`.
+- SVG `#icon-menu` hides and `#icon-x` displays when open.
+- Menu automatically collapses when any navigation link is tapped (`main.js`).
+
+Fluid / Responsive Typography & Grids:
+- Headings scale smoothly across screen sizes using CSS `clamp()`.
+- Programme cards collapse from 4 columns on desktop, to 2 columns on tablet (768px), to 1 column on mobile (< 768px).
+- Day care features switch from 2 columns to 1 column on smaller viewports.
+- Contact cards collapse from 3 columns to 1 column on mobile (< 768px).
+
+Potential Overflow / Responsive Risks Identified:
+1. Horizontal header overflow between 960px and 1100px: The navigation menu contains 10 links plus a CTA button. On screens between 961px and 1100px, font wrapping or horizontal squeeze may occur if screen width is narrow before the 960px mobile toggle takes over.
+2. Long select options on mobile: The programme dropdown in the admission form has descriptive option text like "KG 1 (Kindergarten 1)" which needs testing on small 320px screens.
+
+--------------------------------------------------------------------------------
+6. INTERACTIONS / FUNCTIONALITY STATUS
+--------------------------------------------------------------------------------
+
+Accurate distinction between what is functional and what is placeholder:
+
+1. Navigation Bar & Mobile Menu:
+   - Status: [IMPLEMENTED]
+   - Detail: Fully functional mobile toggle and click-to-close behavior via `src/assets/js/main.js`. Native smooth scrolling supported via CSS.
+
+2. In-Page Smooth Anchor Scrolling:
+   - Status: [IMPLEMENTED]
+   - Detail: Configured via `html { scroll-behavior: smooth; }`. All `#about`, `#programmes`, etc., anchors navigate seamlessly to page sections.
+
+3. Skip Link:
+   - Status: [IMPLEMENTED]
+   - Detail: Keyboard accessible skip link (`.skip-link`) jumps directly to `<main id="main-content">`.
+
+4. FAQ Accordion:
+   - Status: [IMPLEMENTED]
+   - Detail: Uses semantic HTML5 `<details>` and `<summary>`. Opens and closes natively without JavaScript. Fully keyboard accessible (Enter/Space toggles).
+
+5. Admission Enquiry Form:
+   - Status: [PREVIEW / NOT CONNECTED TO BACKEND]
+   - Detail: Form exists in the DOM. JavaScript intercepts submission, validates honeypot spam filter, prevents default post, displays a preview notice ("Thank you! Your enquiry has been received in preview mode..."), and resets the form. No data is transmitted to any server or email service (`site.json` explicitly sets `"forms.delivery": "none"`).
+
+6. Contact Actions (Call / WhatsApp / Email / Map):
+   - Status: [PREVIEW / PLACEHOLDER]
+   - Detail: `site.json` has `null` values for `phoneDisplay`, `phoneE164`, `whatsappDisplay`, `whatsappDigits`, `email`, and `streetAddress`. The templates contain fallback notices informing viewers that contact info is in draft configuration.
+
+7. Gallery Photo Viewing / Lightbox:
+   - Status: [PREVIEW / PLACEHOLDER]
+   - Detail: No modal or lightbox script exists in `src/assets/js/main.js`. The cards render placeholder boxes with category name, caption, and photo ID. (Note: The root prototype `script.js` had a modal script, but that is not part of the active Eleventy source).
+
+8. Testimonials Display:
+   - Status: [NOT CONNECTED / EMPTY DATA]
+   - Detail: Template condition evaluates to false because `testimonials.json` is `[]`. Section is omitted from render.
+
+--------------------------------------------------------------------------------
+7. SEO, ACCESSIBILITY & PERFORMANCE PROFILE
+--------------------------------------------------------------------------------
+
+SEO Implementation:
+- Language tag: `<html lang="en-IN">` in `base.njk`.
+- Title tag: Handled dynamically: `{% if title %}{{ title }} | {% endif %}{{ site.name }}` -> "Home | Feather Touch Foundation School and Day Care Centre".
+- Meta description: Populated from `site.tagline` ("Nurturing Little Minds, Building Strong Foundations.").
+- Open Graph / Twitter Cards: Not yet implemented in `src/_includes/layouts/base.njk`. (Note: The root prototype had OG tags, but `base.njk` currently does not render `<meta property="og:...">` tags).
+- Canonical URL: Not yet implemented in `base.njk`.
+- Structured Data (JSON-LD): Not yet implemented in `base.njk`.
+- Heading Hierarchy: Structured with a single `<h1>` ("Nurturing Little Minds, Building Strong Foundations") in the hero section, followed by semantic `<h2>` for each major section, and `<h3>` / `<h4>` for subcomponents.
+
+Accessibility (a11y) Implementation:
+- Semantic Landmarks: Full HTML5 semantic landmark structure (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<figure>`, `<figcaption>`, `<aside>`, `<footer>`).
+- Skip Link: Included immediately after `<body>` linking to `#main-content`. Focusable via Tab key.
+- Heading association: Sections use `aria-labelledby` referencing corresponding heading IDs (`aria-labelledby="hero-heading"`, etc.).
+- Keyboard accessibility: FAQ uses native `<details>`/`<summary>`. Mobile nav toggle uses `<button type="button">` with `aria-expanded` and `aria-controls`.
+- Focus outlines: `:focus-visible` tokenized with 3px solid outline and 2px offset (`var(--focus-ring-color)`).
+- Form labeling: Every input has a corresponding `<label for="...">`. Required fields marked with `<span class="text-primary">*</span>`.
+- Accessible Typography: Body copy uses Atkinson Hyperlegible Next, a font specifically designed by the Braille Institute for maximum character distinction and low-vision legibility.
+- Motion: `@media (prefers-reduced-motion: reduce)` resets all transitions and animations to 0.01ms.
+
+Performance Implementation:
+- Third-Party Requests: ZERO. No external CDN fonts, external scripts, or tracking pixels.
+- Typography: Self-hosted WOFF2 files (Bricolage Grotesque and Atkinson Hyperlegible Next). Preloaded/swapped locally (~68 KB total).
+- JavaScript Payload: 2.2 KB total (zero dependencies).
+- CSS Payload: 37.9 KB total (unminified, zero external frameworks).
+- HTML Payload: ~63 KB compiled single page.
+- Image Formats: Currently zero bitmap images loaded, avoiding layout shift (CLS).
+- Budget enforcement: Automated script `check-budgets.mjs` verifies compliance on build.
+
+--------------------------------------------------------------------------------
+8. LAUNCH BLOCKERS & VERIFICATION STATUS
+--------------------------------------------------------------------------------
+
+The repository includes a hard launch gate script (`scripts/check-launch-gate.mjs`) that inspects `src/_data/site.json`. Currently, ALL 12 CHECKS FAIL. The site cannot run `npm run build:production` until these are resolved.
+
+Launch Gate Status (Automated Checks):
+1. Phone display (`contact.phoneDisplay`) -> [MISSING - Currently null]
+2. Phone E.164 (`contact.phoneE164`) -> [MISSING - Currently null]
+3. WhatsApp display (`contact.whatsappDisplay`) -> [MISSING - Currently null]
+4. WhatsApp digits (`contact.whatsappDigits`) -> [MISSING - Currently null]
+5. Email address (`contact.email`) -> [MISSING - Currently null]
+6. Street address (`address.streetAddress`) -> [MISSING - Currently null]
+7. Locality (`address.locality`) -> [MISSING - Currently null]
+8. Postal code (`address.postalCode`) -> [MISSING - Currently null]
+9. School hours (`hours.school`) -> [MISSING - Currently null]
+10. Admissions session label (`admissions.sessionLabel`) -> [MISSING - Currently null]
+11. Content sign-off (`launch.contentSignOff`) -> [BLOCKER - Currently false]
+12. Privacy policy approved (`launch.privacyPolicyApproved`) -> [BLOCKER - Currently false]
+
+Additional Critical Blockers:
+13. Authentic Photography: Zero photo files exist on disk in `src/assets/images/source/`. 3 images referenced in `images.json` have `consentConfirmed: false`.
+14. Official Logo Asset: `site.json` has `launch.logoSupplied: false`. Header uses SVG `#icon-circle-check` as a temporary placeholder mark.
+15. Privacy Policy & Legal Pages: No privacy policy or disclosure pages exist in `src/`.
+16. Form Delivery Endpoint: `site.json` has `forms.delivery: "none"` and `endpoint: null`.
+
+--------------------------------------------------------------------------------
+9. EXISTING DESIGN CONSTRAINTS (FOR FUTURE REDESIGN)
+--------------------------------------------------------------------------------
+
+Any future visual or UX redesign must respect the following architectural and technical constraints to prevent breakage:
+
+1. Data-Driven Section Rendering:
+   Sections for Programmes (`programmes.json`), Day Routine (`daySequence.json`), Activities (`activities.json`), Recognition (`recognition.json`), FAQ (`faq.json`), and Gallery (`images.json`) are rendered using Nunjucks loops. Redesigns must maintain compatible data schemas or update the templates accordingly.
+
+2. Performance Budget Limits (`scripts/check-budgets.mjs`):
+   - HTML <= 75 KB per page
+   - CSS main <= 50 KB
+   - Total JS <= 40 KB
+   - Total Fonts <= 120 KB
+   Introducing heavy CSS libraries (e.g., Tailwind output > 50KB) or bloated JS frameworks will break CI production builds.
+
+3. Zero External CDN Dependency:
+   The project is designed to be completely self-contained. Fonts must remain self-hosted WOFF2; icons must remain local SVGs.
+
+4. Form Honeypot & Feedback Structure:
+   The admission form in `src/index.njk` relies on input `name="extra_notes"` and feedback element `#form-feedback`. Redesigning form markup must retain these hooks.
+
+5. Single-Page Anchor System vs Multi-Page Ambition:
+   Currently, all navigation is hash-based (`#about`, `#programmes`). While `navigation.json` defines potential subpages (`/about/`, `/programmes/`), only `src/index.njk` currently exists. Redesigns should maintain anchor stability unless full subpages are explicitly built.
+
+6. Launch Gate Conditional Rendering:
+   Templates use `{% if build.mode != "production" %}` and `{% if site.contact.phoneDisplay %}` to safely fall back to draft notices. These conditionals must not be removed until verified data is injected.
+
+--------------------------------------------------------------------------------
+10. DESIGN-RELEVANT CODE MAP
+--------------------------------------------------------------------------------
+
+| FILE PATH | PURPOSE & CONTENTS | DESIGN RELEVANCE FOR CLAUDE |
+| :--- | :--- | :--- |
+| `src/index.njk` | Homepage template (14 sections) | Master template defining section order, DOM structure, component wrappers, and loop bindings. |
+| `src/_includes/layouts/base.njk` | Base HTML skeleton | Defines document `<head>`, CSS/JS links, skip-link, preview banner, and `<main>` wrapper. |
+| `src/_includes/partials/header.njk` | Site header and navigation | Controls logo mark, desktop menu, mobile toggle, and sticky header structure. |
+| `src/_includes/partials/footer.njk` | 4-column footer | Contains quick links, programme links, school info, and copyright bar. |
+| `src/_includes/partials/icons.njk` | SVG symbol sprite | Defines 11 Lucide-based icons used throughout cards, buttons, lists, and headers. |
+| `src/assets/css/main.css` | Design system & stylesheet (1,588 lines) | Contains all design tokens, color palette, typography scale, spacing, card styles, and media queries. |
+| `src/assets/js/main.js` | Client interaction module | Handles mobile menu toggling, link auto-closing, and admission form submission preview. |
+| `src/_data/site.json` | School metadata & contact config | Controls all contact links, address displays, hours, and launch gate check fields. |
+| `src/_data/about.json` | Pedagogical and philosophical copy | Supplies lead copy, vision, mission, learning methods, developmental areas, safety topics, partnership. |
+| `src/_data/programmes.json` | 4 academic programmes | Supplies names, taglines, and focus area pill tags for Play Group, Nursery, KG 1, KG 2. |
+| `src/_data/dayCare.json` | Day care features & quote | Supplies day care title, lead, quote, and 8 inclusion items. |
+| `src/_data/daySequence.json` | 9-step daily routine | Supplies sequence titles for the daily schedule timeline. |
+| `src/_data/activities.json` | 19 school events & activities | Supplies activity chip labels for the school life section. |
+| `src/_data/recognition.json` | Student recognition categories | Supplies positive reinforcement copy and 6 award categories. |
+| `src/_data/images.json` | Photo metadata & focal points | Supplies captions, alt text, focal points, and category badges for gallery cards. |
+| `src/_data/faq.json` | 6 FAQ Q&A pairs | Supplies accordion questions and answers for parent enquiries. |
+| `scripts/check-budgets.mjs` | File size enforcement script | Hard limits on HTML (75KB), CSS (50KB), JS (40KB), and Fonts (120KB). |
+| `scripts/check-launch-gate.mjs` | Pre-launch data gate | Defines the 12 required data properties needed for launch sign-off. |
+
+--------------------------------------------------------------------------------
+11. CLAUDE CONTEXT RECOMMENDATIONS
+--------------------------------------------------------------------------------
+
+A. SHOULD BE UPLOADED TO CLAUDE NOW:
+1. `04 — Feather Touch Technical Context.txt` (this document): Provides full architectural, responsive, and technical layout parameters.
+2. `05 — Feather Touch Content & Asset Map.txt`: Provides exact content copy, asset status, and missing data points.
+3. `src/index.njk`: Gives Claude the exact template structure and Nunjucks syntax currently in use.
+4. `src/assets/css/main.css` (or token extract lines 1–350): Informs Claude of the current design token system, color hex codes, and spacing variables.
+5. `src/_data/site.json`, `about.json`, `programmes.json`, `dayCare.json`: Provides the core data structures Claude must design around.
+
+Why: Enables Claude to design a visually stunning, premium aesthetic that drops directly into the existing Eleventy architecture without guessing or proposing incompatible frameworks.
+
+B. SHOULD NOT BE UPLOADED TO CLAUDE YET:
+1. Root legacy prototype files (`index.html`, `styles.css`, `script.js`, `config.js`):
+   Why: These represent the obsolete pre-Eleventy codebase (108KB HTML, Google Fonts, modals). Uploading them will confuse Claude about which architecture is active.
+2. `package-lock.json` and `node_modules/`:
+   Why: Consumes massive context window with zero design or layout value.
+3. `_site/` generated output:
+   Why: Redundant; compiled directly from `src/`.
+
+C. SHOULD BE GIVEN TO THE IMPLEMENTATION AGENT LATER:
+1. `eleventy.config.js`: For tweaking build pipeline or passthroughs once new assets (images, webp) are introduced.
+2. `scripts/check-launch-gate.mjs` and `scripts/check-budgets.mjs`: For validating that new redesigned templates stay strictly within the budget limits and pass launch checks.
+3. Final client assets (real school logo SVG/PNG, verified photographs, signed-off contact numbers): For injecting into `src/assets/images/` and `src/_data/site.json` when available.
+
+================================================================================
+END OF TECHNICAL CONTEXT DOCUMENT
+================================================================================

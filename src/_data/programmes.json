@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "play-group",
+    "name": "Play Group",
+    "tagline": "Learning Begins With Wonder",
+    "focusAreas": [
+      "Socialisation",
+      "Language development",
+      "Motor skills",
+      "Sensory exploration",
+      "Music & movement",
+      "Creative expression",
+      "Basic concepts"
+    ],
+    "ageGroup": null,
+    "timings": null,
+    "overview": null,
+    "parentExpectations": null,
+    "imageId": null
+  },
+  {
+    "slug": "nursery",
+    "name": "Nursery",
+    "tagline": "Explore. Discover. Learn.",
+    "focusAreas": [
+      "Letters and sounds",
+      "Numbers and basic concepts",
+      "Colours and shapes",
+      "Rhymes and stories",
+      "Art & craft",
+      "Environmental awareness",
+      "Fine and gross motor activities",
+      "Social and emotional skills"
+    ],
+    "ageGroup": null,
+    "timings": null,
+    "overview": null,
+    "parentExpectations": null,
+    "imageId": null
+  },
+  {
+    "slug": "kg-1",
+    "name": "KG 1",
+    "tagline": "Growing Confidence, Growing Knowledge",
+    "focusAreas": [
+      "English language",
+      "Early literacy",
+      "Numeracy",
+      "General awareness",
+      "Rhymes and storytelling",
+      "Art & craft",
+      "Creative activities",
+      "Physical development",
+      "Social skills"
+    ],
+    "ageGroup": null,
+    "timings": null,
+    "overview": null,
+    "parentExpectations": null,
+    "imageId": null
+  },
+  {
+    "slug": "kg-2",
+    "name": "KG 2",
+    "tagline": "Preparing Children for the Next Big Step",
+    "focusAreas": [
+      "Reading readiness",
+      "Writing skills",
+      "Number concepts",
+      "Communication",
+      "Logical thinking",
+      "General awareness",
+      "Creative expression",
+      "Confidence and independence"
+    ],
+    "ageGroup": null,
+    "timings": null,
+    "overview": null,
+    "parentExpectations": null,
+    "imageId": null
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "classroom-puzzle",
+    "source": "WhatsApp_Image_2026-09-14_at_20_28_25.jpeg",
+    "alt": "Two children in Feather Touch uniforms fit pieces into a foam puzzle together at a classroom table.",
+    "caption": "Solving a puzzle together in class.",
+    "focal": {
+      "base": "50% 40%",
+      "md": "50% 45%",
+      "square": "50% 60%"
+    },
+    "galleryCategory": "classrooms",
+    "tags": [],
+    "consentConfirmed": false
+  },
+  {
+    "id": "classroom-colouring",
+    "source": "WhatsApp_Image_2026-09-14_at_20_27_56.jpeg",
+    "alt": "A child concentrates on colouring a sun in an activity book at a classroom table.",
+    "caption": "Colouring during an activity session.",
+    "focal": {
+      "base": "45% 55%",
+      "md": "45% 58%",
+      "square": "45% 55%"
+    },
+    "galleryCategory": "learning",
+    "tags": [],
+    "consentConfirmed": false
+  },
+  {
+    "id": "welcome-back",
+    "source": "WhatsApp_Image_2026-09-14_at_20_28_58.jpeg",
+    "alt": "A child stands between large paper flowers under a handmade 'Welcome Back to School' sign at the school entrance.",
+    "caption": "Welcome back to school.",
+    "focal": {
+      "base": "48% 35%",
+      "md": "45% 40%",
+      "square": "45% 40%"
+    },
+    "galleryCategory": "events",
+    "tags": [],
+    "consentConfirmed": false
+  }
+]

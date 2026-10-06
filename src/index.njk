@@ -1,0 +1,622 @@
+---
+layout: layouts/base.njk
+title: "Home"
+---
+
+<!-- ==========================================================================
+     1. HERO SECTION
+     ========================================================================== -->
+<section class="hero-section" id="home" aria-labelledby="hero-heading">
+  <div class="container hero__container">
+    <div class="hero__content">
+      <div class="hero__badge">
+        <span class="badge badge--gold">
+          <svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+          Admissions Open &bull; Session 2026–27
+        </span>
+      </div>
+
+      <h1 id="hero-heading" class="hero__title">
+        Nurturing Little Minds, <br>
+        <span class="hero__title-accent">Building Strong Foundations.</span>
+      </h1>
+
+      <p class="hero__lead">
+        {{ site.name }} provides a joyful, safe, and stimulating environment for young learners through play-based discovery, structured development, and caring educators.
+      </p>
+
+      <div class="hero__actions">
+        <a href="#admissions" class="btn btn--primary btn--lg">Enquire for Admissions</a>
+        <a href="#programmes" class="btn btn--secondary btn--lg">Explore Programmes</a>
+      </div>
+
+      <div class="hero__trust-pills">
+        <div class="trust-pill">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+          <span>Play Group &bull; Nursery &bull; KG 1 &bull; KG 2</span>
+        </div>
+        <div class="trust-pill">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+          <span>Extended Day Care Facility</span>
+        </div>
+        <div class="trust-pill">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+          <span>Child-Centric Learning</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__card">
+      <div class="welcome-box">
+        <div class="welcome-box__header">
+          <span class="welcome-box__tag">Admissions 2026–27</span>
+          <h2 class="welcome-box__title">Welcome to Feather Touch</h2>
+        </div>
+        <p class="welcome-box__text">
+          Where education is not about pressure or rote learning, but about curiosity, discovery, confidence, and joy.
+        </p>
+        <ul class="welcome-box__list">
+          <li><strong>Holistic Development:</strong> Cognitive, social, and emotional growth.</li>
+          <li><strong>Experiential Learning:</strong> Hands-on activities and creative play.</li>
+          <li><strong>Safe Environment:</strong> Child safety, wellbeing, and dedicated care.</li>
+        </ul>
+        <div class="welcome-box__cta">
+          <a href="#contact" class="btn btn--secondary btn--block">Schedule a Campus Visit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     2. ABOUT US / WHY FEATHER TOUCH
+     ========================================================================== -->
+<section class="section bg-ivory" id="about" aria-labelledby="about-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">About Feather Touch</span>
+      <h2 id="about-heading" class="section-title">A Caring Start for Lifelong Learning</h2>
+      <p class="section-subtitle">{{ about.lead }}</p>
+    </div>
+
+    <div class="about__grid">
+      <div class="about__narrative">
+        {% for para in about.paragraphs %}
+          <p class="about__text">{{ para }}</p>
+        {% endfor %}
+
+        <div class="vision-card">
+          <h3 class="vision-card__title">Our Vision</h3>
+          <p class="vision-card__text">{{ about.vision }}</p>
+        </div>
+      </div>
+
+      <div class="mission-box">
+        <h3 class="mission-box__title">Our Mission</h3>
+        <p class="mission-box__lead">Guided by our commitment to each child:</p>
+        <ul class="mission-list">
+          {% for item in about.mission %}
+            <li class="mission-list__item">
+              <svg class="icon icon--success" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+              <span>{{ item }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     3. PROGRAMMES
+     ========================================================================== -->
+<section class="section bg-card" id="programmes" aria-labelledby="programmes-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Our Programmes</span>
+      <h2 id="programmes-heading" class="section-title">Foundational Learning Pathways</h2>
+      <p class="section-subtitle">
+        Curriculum tailored to critical developmental milestones from toddlerhood through kindergarten.
+      </p>
+    </div>
+
+    <div class="grid grid--2-col grid--4-col">
+      {% for prog in programmes %}
+        <article class="programme-card" aria-labelledby="prog-title-{{ prog.slug }}">
+          <div class="programme-card__header">
+            <span class="programme-card__badge">{{ prog.name }}</span>
+            <h3 id="prog-title-{{ prog.slug }}" class="programme-card__title">{{ prog.name }}</h3>
+            <p class="programme-card__tagline">{{ prog.tagline }}</p>
+          </div>
+
+          <div class="programme-card__body">
+            <h4 class="programme-card__subtitle">Core Focus Areas:</h4>
+            <ul class="focus-pill-list">
+              {% for focus in prog.focusAreas %}
+                <li class="focus-pill">{{ focus }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="programme-card__footer">
+            <a href="#admissions" class="btn btn--secondary btn--block">Enquire for {{ prog.name }}</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="section-note text-center">
+      <p>
+        <em>Admissions open for Session 2026–27. Specific age criteria and batch timings provided upon enquiry.</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     4. DAY CARE CENTRE
+     ========================================================================== -->
+<section class="section bg-warm" id="daycare" aria-labelledby="daycare-heading">
+  <div class="container">
+    <div class="daycare-banner">
+      <div class="daycare-banner__content">
+        <span class="section-eyebrow">Extended Support for Families</span>
+        <h2 id="daycare-heading" class="daycare-banner__title">{{ dayCare.heading }}</h2>
+        <p class="daycare-banner__lead">{{ dayCare.lead }}</p>
+
+        <blockquote class="daycare-quote">
+          &ldquo;{{ dayCare.quote }}&rdquo;
+        </blockquote>
+
+        <div class="daycare-features">
+          <h3 class="daycare-features__title">What Day Care Includes:</h3>
+          <ul class="daycare-features__grid">
+            {% for inc in dayCare.includes %}
+              <li class="daycare-features__item">
+                <svg class="icon icon--success" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+                <span>{{ inc }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="daycare-cta">
+          <a href="#admissions" class="btn btn--primary">Enquire for Day Care Options</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     5. HOW CHILDREN LEARN (APPROACH & DEVELOPMENT)
+     ========================================================================== -->
+<section class="section bg-card" id="learning" aria-labelledby="learning-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Pedagogy &amp; Philosophy</span>
+      <h2 id="learning-heading" class="section-title">{{ about.approach.header }}</h2>
+      <p class="section-subtitle">{{ about.approach.lead }}</p>
+    </div>
+
+    <!-- Methods -->
+    <div class="learning-methods-wrapper">
+      <h3 class="subsection-title text-center">Our Teaching &amp; Learning Methods</h3>
+      <div class="grid grid--2-col grid--3-col">
+        {% for method in about.approach.methods %}
+          <div class="method-card">
+            <div class="method-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><use href="#icon-circle-check"></use></svg>
+            </div>
+            <h4 class="method-card__name">{{ method.name }}</h4>
+            <p class="method-card__desc">{{ method.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Developmental Areas -->
+    <div class="development-areas-wrapper">
+      <div class="section-header text-center" style="margin-top: var(--space-3xl);">
+        <h3 class="subsection-title">Comprehensive Child Development</h3>
+        <p class="section-subtitle">{{ about.development.lead }}</p>
+      </div>
+
+      <div class="grid grid--2-col grid--3-col">
+        {% for area in about.development.areas %}
+          <div class="growth-card">
+            <span class="growth-card__badge">{{ area.name }}</span>
+            <p class="growth-card__text">{{ area.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     6. A DAY AT FEATHER TOUCH (DAILY SEQUENCE)
+     ========================================================================== -->
+<section class="section bg-ivory" id="routine" aria-labelledby="routine-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Predictable &amp; Joyful Flow</span>
+      <h2 id="routine-heading" class="section-title">A Day at Feather Touch</h2>
+      <p class="section-subtitle">
+        A balanced daily rhythm blending active discovery, mindful calm, social mealtime, and story exploration.
+      </p>
+    </div>
+
+    <div class="sequence-list">
+      {% for step in daySequence %}
+        <div class="sequence-step">
+          <div class="sequence-step__number">{{ loop.index }}</div>
+          <div class="sequence-step__details">
+            <h3 class="sequence-step__title">{{ step.title }}</h3>
+            <p class="sequence-step__desc">Structured with warmth, guidance, and engaging learning interactions.</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     7. ACTIVITIES & LIFE AT FEATHER TOUCH
+     ========================================================================== -->
+<section class="section bg-card" id="activities" aria-labelledby="activities-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Vibrant School Life</span>
+      <h2 id="activities-heading" class="section-title">Events, Festivities &amp; Creative Activities</h2>
+      <p class="section-subtitle">
+        Celebrating culture, seasonal wonders, environmental consciousness, and creative self-expression.
+      </p>
+    </div>
+
+    <div class="activities-cloud">
+      {% for act in activities %}
+        <span class="activity-chip">
+          <span class="activity-chip__dot" aria-hidden="true"></span>
+          {{ act }}
+        </span>
+      {% endfor %}
+    </div>
+
+    <!-- Student Recognition -->
+    <div class="recognition-box">
+      <div class="recognition-box__header text-center">
+        <span class="section-eyebrow">Positive Reinforcement</span>
+        <h3 class="recognition-box__title">{{ recognition.closing }}</h3>
+        <p class="recognition-box__intro">{{ recognition.intro }}</p>
+      </div>
+
+      <div class="recognition-grid">
+        {% for cat in recognition.categories %}
+          <div class="recognition-item">
+            <svg class="icon icon--gold" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+            <span>{{ cat }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     8. SAFETY & WELLBEING
+     ========================================================================== -->
+<section class="section bg-cool" id="safety" aria-labelledby="safety-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Our Paramount Priority</span>
+      <h2 id="safety-heading" class="section-title">{{ about.safety.heading }}</h2>
+      <p class="section-subtitle">{{ about.safety.lead }}</p>
+    </div>
+
+    <div class="safety-grid">
+      {% for topic in about.safety.topics %}
+        <div class="safety-card">
+          <div class="safety-card__icon" aria-hidden="true">
+            <svg class="icon icon--primary" viewBox="0 0 24 24"><use href="#icon-circle-check"></use></svg>
+          </div>
+          <h3 class="safety-card__title">{{ topic }}</h3>
+          <p class="safety-card__text">Integrated sensitively through age-appropriate discussions, habits, and guidance.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="safety-note text-center">
+      <p>{{ about.safety.commitmentNote }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     9. PARENT PARTNERSHIP
+     ========================================================================== -->
+<section class="section bg-ivory" id="partnership" aria-labelledby="partnership-heading">
+  <div class="container">
+    <div class="partnership-card">
+      <div class="partnership-card__header text-center">
+        <span class="section-eyebrow">Collaborative Journey</span>
+        <h2 id="partnership-heading" class="section-title">{{ about.partnership.heading }}</h2>
+        <p class="section-subtitle">{{ about.partnership.lead }}</p>
+      </div>
+
+      <ul class="partnership-list">
+        {% for item in about.partnership.items %}
+          <li class="partnership-item">
+            <svg class="icon icon--success" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-check"></use></svg>
+            <span>{{ item }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="partnership-closing text-center">
+        <p class="partnership-closing__text">&ldquo;{{ about.partnership.closing }}&rdquo;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     10. GALLERY (AUTHENTIC PHOTOS & STATUS)
+     ========================================================================== -->
+<section class="section bg-card" id="gallery" aria-labelledby="gallery-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Classroom &amp; Event Moments</span>
+      <h2 id="gallery-heading" class="section-title">Moments at Feather Touch</h2>
+      <p class="section-subtitle">A glimpse into learning experiences, creative craft, and celebration days.</p>
+    </div>
+
+    <div class="grid grid--3-col gallery-grid">
+      {% for img in images %}
+        <figure class="gallery-card">
+          <div class="gallery-card__img-container">
+            <div class="gallery-card__placeholder">
+              <span class="gallery-card__category">{{ img.galleryCategory | capitalize }}</span>
+              <p class="gallery-card__caption">{{ img.caption }}</p>
+              <span class="gallery-card__meta">Photo ID: {{ img.id }}</span>
+            </div>
+          </div>
+          <figcaption class="gallery-card__desc">
+            <strong>{{ img.caption }}</strong>
+            <small class="text-muted d-block">{{ img.alt }}</small>
+          </figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+
+    {% if build.mode != "production" %}
+      <div class="preview-notice-box">
+        <svg class="icon icon--alert" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-circle-alert"></use></svg>
+        <div>
+          <strong>Launch Gate Notice:</strong> Full photography consent verification is in progress. Images are displayed with descriptive context in preview mode.
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ==========================================================================
+     11. TESTIMONIALS (ONLY VERIFIED)
+     ========================================================================== -->
+{% if testimonials and testimonials.length > 0 %}
+<section class="section bg-warm" id="testimonials" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Parent Feedback</span>
+      <h2 id="testimonials-heading" class="section-title">What Parents Say</h2>
+    </div>
+    <div class="grid grid--2-col">
+      {% for t in testimonials %}
+        <blockquote class="testimonial-card">
+          <p class="testimonial-text">&ldquo;{{ t.quote }}&rdquo;</p>
+          <cite class="testimonial-author">&mdash; {{ t.parentName }}</cite>
+        </blockquote>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ==========================================================================
+     12. ADMISSIONS & ENQUIRY FORM
+     ========================================================================== -->
+<section class="section bg-ivory" id="admissions" aria-labelledby="admissions-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Join Our School Family</span>
+      <h2 id="admissions-heading" class="section-title">Admissions Open — Session 2026–27</h2>
+      <p class="section-subtitle">
+        We welcome you to connect with us and take the first step towards your child&rsquo;s foundational journey.
+      </p>
+    </div>
+
+    <div class="admissions-layout">
+      <!-- Steps -->
+      <div class="admissions-steps">
+        <h3 class="admissions-steps__title">Simple Admission Steps</h3>
+        
+        <div class="admission-step">
+          <div class="admission-step__badge">1</div>
+          <div class="admission-step__content">
+            <h4>Enquiry &amp; Initial Interaction</h4>
+            <p>Fill out the admission enquiry form below or reach out to us by phone to discuss your child's age group and requirements.</p>
+          </div>
+        </div>
+
+        <div class="admission-step">
+          <div class="admission-step__badge">2</div>
+          <div class="admission-step__content">
+            <h4>Campus Visit &amp; Walkthrough</h4>
+            <p>Visit the school, explore our safe classroom facilities, and understand our daily routine with our educators.</p>
+          </div>
+        </div>
+
+        <div class="admission-step">
+          <div class="admission-step__badge">3</div>
+          <div class="admission-step__content">
+            <h4>Enrolment &amp; Documentation</h4>
+            <p>Submit basic registration details, birth certificate verification, and child healthcare information.</p>
+          </div>
+        </div>
+
+        <div class="admission-step">
+          <div class="admission-step__badge">4</div>
+          <div class="admission-step__content">
+            <h4>Welcome &amp; Settling In</h4>
+            <p>Gentle transition sessions designed to help your little one feel secure, comfortable, and excited for school.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enquiry Form -->
+      <div class="admissions-form-box" id="enquire">
+        <h3 class="admissions-form-box__title">Online Admission Enquiry</h3>
+        <p class="admissions-form-box__lead">Fill in the details below and our team will get in touch with you.</p>
+
+        <form class="enquiry-form" id="enquiry-form" method="post" action="#">
+          <!-- Honeypot for spam bot prevention -->
+          <div class="honeypot-field" aria-hidden="true">
+            <label for="extra_notes">Leave this field blank</label>
+            <input type="text" id="extra_notes" name="extra_notes" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="parent_name">Parent / Guardian Name <span class="text-primary">*</span></label>
+            <input class="form-control" type="text" id="parent_name" name="parent_name" required placeholder="Enter full name">
+          </div>
+
+          <div class="grid grid--2-col" style="gap: var(--space-md); margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone / WhatsApp <span class="text-primary">*</span></label>
+              <input class="form-control" type="tel" id="phone" name="phone" required placeholder="e.g. 9876543210">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address</label>
+              <input class="form-control" type="email" id="email" name="email" placeholder="name@example.com">
+            </div>
+          </div>
+
+          <div class="grid grid--2-col" style="gap: var(--space-md); margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label" for="child_name">Child's Name</label>
+              <input class="form-control" type="text" id="child_name" name="child_name" placeholder="Child's full name">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="programme_interest">Programme of Interest <span class="text-primary">*</span></label>
+              <select class="form-control" id="programme_interest" name="programme_interest" required>
+                <option value="" disabled selected>Select Programme</option>
+                <option value="Play Group">Play Group</option>
+                <option value="Nursery">Nursery</option>
+                <option value="KG 1">KG 1 (Kindergarten 1)</option>
+                <option value="KG 2">KG 2 (Kindergarten 2)</option>
+                <option value="Day Care">Day Care Extended Facility</option>
+                <option value="School + Day Care">School + Day Care Combined</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message">Questions or Specific Requirements</label>
+            <textarea class="form-control" id="message" name="message" rows="3" placeholder="Tell us about your child's age, specific interests, or any questions..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--block">Submit Admission Enquiry</button>
+
+          <div class="form-feedback" id="form-feedback" role="status" aria-live="polite" style="display: none; margin-top: var(--space-sm);">
+            Thank you! Your enquiry has been received in preview mode.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     13. FAQ SECTION
+     ========================================================================== -->
+<section class="section bg-card" id="faq" aria-labelledby="faq-heading">
+  <div class="container" style="max-width: 860px;">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Got Questions?</span>
+      <h2 id="faq-heading" class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Helpful answers for parents considering Feather Touch Foundation School.</p>
+    </div>
+
+    <div class="faq-accordion">
+      {% for item in faq %}
+        <details class="faq-item">
+          <summary class="faq-item__question">
+            <span>{{ item.question }}</span>
+            <svg class="icon icon--chevron" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </summary>
+          <div class="faq-item__answer">
+            <p>{{ item.answer }}</p>
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     14. CONTACT US
+     ========================================================================== -->
+<section class="section bg-cool" id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-eyebrow">Get in Touch</span>
+      <h2 id="contact-heading" class="section-title">Contact Feather Touch</h2>
+      <p class="section-subtitle">We are here to answer your queries and welcome you to our school.</p>
+    </div>
+
+    <div class="grid grid--3-col contact-grid">
+      <div class="contact-card">
+        <div class="contact-card__icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-phone"></use></svg>
+        </div>
+        <h3 class="contact-card__title">Call / WhatsApp</h3>
+        {% if site.contact.phoneDisplay %}
+          <p><a href="tel:{{ site.contact.phoneE164 }}" class="contact-card__link">{{ site.contact.phoneDisplay }}</a></p>
+        {% else %}
+          <p class="text-muted"><em>Contact number in draft configuration pending client sign-off.</em></p>
+        {% endif %}
+        {% if site.contact.whatsappDisplay %}
+          <p><a href="https://wa.me/{{ site.contact.whatsappDigits }}" class="btn btn--secondary btn--sm">Chat on WhatsApp</a></p>
+        {% endif %}
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-card__icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-mail"></use></svg>
+        </div>
+        <h3 class="contact-card__title">Email Us</h3>
+        {% if site.contact.email %}
+          <p><a href="mailto:{{ site.contact.email }}" class="contact-card__link">{{ site.contact.email }}</a></p>
+        {% else %}
+          <p class="text-muted"><em>Official email address in draft configuration pending client sign-off.</em></p>
+        {% endif %}
+        <p class="contact-card__meta">We respond to enquiries within 24–48 hours.</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-card__icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-map-pin"></use></svg>
+        </div>
+        <h3 class="contact-card__title">Visit School</h3>
+        {% if site.address.streetAddress %}
+          <p>{{ site.address.streetAddress }}, {{ site.address.locality }}, {{ site.address.city }} - {{ site.address.postalCode }}</p>
+        {% else %}
+          <p class="text-muted"><em>Campus address in draft configuration pending client sign-off.</em></p>
+        {% endif %}
+        <p class="contact-card__meta">Schedule a walkthrough via the admissions form.</p>
+      </div>
+    </div>
+  </div>
+</section>
