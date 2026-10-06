@@ -1,0 +1,464 @@
+// Feather Touch — PostgreSQL schema (Phase 1A foundation)
+//
+// - Binary media NEVER lives here: MediaAsset stores object-storage keys + metadata only.
+// - Auth models (User/Session/Account/Verification/TwoFactor/RateLimit) mirror the
+//   field set required by better-auth 1.7.x core + the twoFactor plugin. Do not rename
+//   fields without updating lib/server/auth/auth.ts.
+// - Only ADMIN users exist in V1. There are no public/parent accounts.
+// - School facts (contact, hours, Day Care age, timings…) are nullable everywhere and
+//   must stay null until the school supplies them.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────────────────────── Auth (better-auth) ─────────────────────────────
+
+enum AdminRole {
+  ADMIN
+}
+
+model User {
+  id               String    @id
+  name             String
+  email            String    @unique
+  emailVerified    Boolean   @default(false)
+  image            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  // better-auth twoFactor plugin
+  twoFactorEnabled Boolean?  @default(false)
+  // better-auth additionalFields (input: false — never settable from the client)
+  role             AdminRole @default(ADMIN)
+  isActive         Boolean   @default(true)
+
+  sessions      Session[]
+  accounts      Account[]
+  twoFactors    TwoFactor[]
+  enquiryNotes  EnquiryNote[]
+  statusChanges EnquiryStatusChange[]
+  uploads       MediaAsset[]          @relation("uploadedBy")
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String? // argon2id hash for the "credential" provider
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
+}
+
+model TwoFactor {
+  id                      String    @id
+  secret                  String
+  backupCodes             String
+  userId                  String
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified                Boolean?  @default(true)
+  failedVerificationCount Int?      @default(0)
+  lockedUntil             DateTime?
+
+  @@index([secret])
+  @@index([userId])
+  @@map("two_factors")
+}
+
+/// better-auth database rate-limit storage (login / 2FA endpoints).
+model RateLimit {
+  id          String @id @default(cuid())
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+
+  @@map("auth_rate_limits")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String // e.g. "enquiry.status.update", "media.delete"
+  entityType String
+  entityId   String?
+  metadata   Json?
+  ipHash     String?
+  createdAt  DateTime @default(now())
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ───────────────────────────── Enquiries ─────────────────────────────
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  VISIT_SCHEDULED
+  CONVERTED
+  CLOSED
+}
+
+/// Mirrors the existing Eleventy form's <select name="programme_interest"> options.
+/// SCHOOL_PLUS_DAY_CARE is pending client confirmation (see docs/PHASE-1A.md).
+enum ProgrammeInterest {
+  PLAY_GROUP
+  NURSERY
+  KG1
+  KG2
+  DAY_CARE
+  SCHOOL_PLUS_DAY_CARE
+}
+
+model Enquiry {
+  id                    String            @id @default(cuid())
+  parentName            String
+  phoneE164             String
+  phoneRaw              String
+  email                 String?
+  childName             String?
+  programmeInterest     ProgrammeInterest
+  message               String?
+  status                EnquiryStatus     @default(NEW)
+  visitScheduledAt      DateTime?
+  closedReason          String?
+  privacyConsentAt      DateTime?
+  whatsappOptIn         Boolean           @default(false)
+  source                String            @default("website")
+  ipHash                String? // salted hash — raw IPs are never stored
+  userAgent             String?
+  possibleDuplicateOfId String?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  notes         EnquiryNote[]
+  statusHistory EnquiryStatusChange[]
+  notifications NotificationJob[]
+
+  @@index([status, createdAt])
+  @@index([phoneE164])
+  @@map("enquiries")
+}
+
+model EnquiryNote {
+  id        String   @id @default(cuid())
+  enquiryId String
+  authorId  String?
+  body      String
+  createdAt DateTime @default(now())
+  enquiry   Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([enquiryId, createdAt])
+  @@map("enquiry_notes")
+}
+
+model EnquiryStatusChange {
+  id         String         @id @default(cuid())
+  enquiryId  String
+  fromStatus EnquiryStatus?
+  toStatus   EnquiryStatus
+  actorId    String?
+  createdAt  DateTime       @default(now())
+  enquiry    Enquiry        @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  actor      User?          @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([enquiryId, createdAt])
+  @@map("enquiry_status_changes")
+}
+
+// ───────────────────────────── Notification outbox ─────────────────────────────
+
+enum NotificationChannel {
+  EMAIL
+  WHATSAPP
+}
+
+enum NotificationStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
+  DEAD
+}
+
+model NotificationJob {
+  id                String              @id @default(cuid())
+  enquiryId         String?
+  channel           NotificationChannel
+  recipient         String
+  template          String
+  payload           Json
+  status            NotificationStatus  @default(PENDING)
+  attempts          Int                 @default(0)
+  nextAttemptAt     DateTime            @default(now())
+  lockedUntil       DateTime?
+  lastError         String?
+  providerMessageId String?             @unique
+  deliveredAt       DateTime?
+  sentAt            DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  enquiry           Enquiry?            @relation(fields: [enquiryId], references: [id], onDelete: SetNull)
+
+  @@unique([enquiryId, channel, recipient, template])
+  @@index([status, nextAttemptAt])
+  @@map("notification_jobs")
+}
+
+/// Application-level fixed-window rate limiting (public enquiry form, etc.).
+model RateLimitBucket {
+  key         String
+  windowStart DateTime
+  count       Int      @default(0)
+
+  @@id([key, windowStart])
+  @@map("rate_limit_buckets")
+}
+
+// ───────────────────────────── Media (metadata only) ─────────────────────────────
+
+enum MediaKind {
+  IMAGE
+  VIDEO
+}
+
+enum MediaStatus {
+  UPLOADING
+  PROCESSING
+  READY
+  FAILED
+}
+
+enum Placement {
+  HERO_SLIDESHOW
+  SCHOOL_LIFE
+  GALLERY
+}
+
+enum GalleryCategory {
+  CLASSROOMS
+  LEARNING
+  EVENTS
+  FESTIVALS
+  ART_CRAFT
+  SPORTS
+  PERFORMANCES
+  PARENT_CHILD
+  CELEBRATIONS
+}
+
+model MediaAsset {
+  id               String      @id @default(cuid())
+  kind             MediaKind
+  status           MediaStatus @default(UPLOADING)
+  storageKey       String      @unique
+  variants         Json?
+  mimeType         String
+  bytes            Int
+  width            Int?
+  height           Int?
+  durationSec      Float?
+  blurDataUrl      String?
+  altText          String      @default("")
+  isDecorative     Boolean     @default(false)
+  caption          String?
+  focalX           Int         @default(50)
+  focalY           Int         @default(50)
+  originalFilename String?
+  consentConfirmed Boolean     @default(false)
+  consentNote      String?
+  uploadedById     String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  deletedAt        DateTime?
+
+  uploadedBy     User?            @relation("uploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
+  placements     MediaPlacement[]
+  videosAsFile   Video[]          @relation("videoFile")
+  videosAsPoster Video[]          @relation("videoPoster")
+  programmes     Programme[]
+
+  @@index([kind, deletedAt])
+  @@map("media_assets")
+}
+
+model MediaPlacement {
+  id        String           @id @default(cuid())
+  mediaId   String
+  placement Placement
+  category  GalleryCategory?
+  sortOrder Int
+  isActive  Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  media     MediaAsset       @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([placement, mediaId])
+  @@index([placement, isActive, sortOrder])
+  @@map("media_placements")
+}
+
+model Video {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  fileId      String
+  posterId    String
+  captionsKey String?
+  sortOrder   Int
+  isActive    Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  file        MediaAsset @relation("videoFile", fields: [fileId], references: [id], onDelete: Restrict)
+  poster      MediaAsset @relation("videoPoster", fields: [posterId], references: [id], onDelete: Restrict)
+
+  @@index([isActive, sortOrder])
+  @@map("videos")
+}
+
+// ───────────────────────────── Managed content ─────────────────────────────
+
+model Programme {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  /// Approved ages in years. NULL = not yet confirmed by the school (e.g. Day Care).
+  ageMinYears Int?
+  ageMaxYears Int?
+  tagline     String?
+  overview    String?
+  timings     String?
+  focusAreas  String[]
+  imageId     String?
+  sortOrder   Int
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  image       MediaAsset? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@map("programmes")
+}
+
+model Faq {
+  id         String   @id @default(cuid())
+  /// Stable key from the original faq.json (e.g. "classes"); used for idempotent seeding.
+  key        String   @unique
+  question   String
+  answer     String
+  group      String
+  sortOrder  Int
+  showOnHome Boolean  @default(true)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+enum ReviewStatus {
+  DRAFT
+  APPROVED
+  ARCHIVED
+}
+
+/// Real parent reviews only. Public rendering requires status=APPROVED AND consentConfirmed.
+model ParentReview {
+  id               String       @id @default(cuid())
+  displayName      String
+  context          String?
+  quote            String
+  status           ReviewStatus @default(DRAFT)
+  consentConfirmed Boolean      @default(false)
+  consentNote      String?
+  approvedById     String?
+  approvedAt       DateTime?
+  sortOrder        Int
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([status, sortOrder])
+  @@map("parent_reviews")
+}
+
+/// Singleton (id = "singleton"). Every school fact is nullable and starts null.
+model SiteSettings {
+  id                     String   @id @default("singleton")
+  phoneDisplay           String?
+  phoneE164              String?
+  whatsappDisplay        String?
+  whatsappDigits         String?
+  whatsappPrefillMessage String?
+  email                  String?
+  streetAddress          String?
+  locality               String?
+  city                   String?
+  region                 String?
+  postalCode             String?
+  country                String?
+  mapsUrl                String?
+  mapsEmbedUrl           String?
+  hoursSchool            String?
+  hoursOffice            String?
+  hoursVisiting          String?
+  admissionsSessionLabel String?
+  admissionsOpen         Boolean  @default(false)
+  responseTimeText       String?
+  // Launch checklist (human sign-offs; carried over from site.json "launch")
+  contentSignOff         Boolean  @default(false)
+  privacyPolicyApproved  Boolean  @default(false)
+  logoSupplied           Boolean  @default(false)
+  ogImageConsent         Boolean  @default(false)
+  updatedAt              DateTime @updatedAt
+  updatedById            String?
+
+  @@map("site_settings")
+}

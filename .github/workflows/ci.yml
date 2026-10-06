@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "feat/**"]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Existing Eleventy site (unchanged; must keep building until cutover) ──
+  eleventy:
+    name: Eleventy build (legacy site)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  # ── New Next.js application (web/) ──
+  web:
+    name: Next.js app (web/)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: feather
+          POSTGRES_PASSWORD: feather_ci_only
+          POSTGRES_DB: feather_touch_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U feather -d feather_touch_test"
+          --health-interval 3s --health-timeout 3s --health-retries 20
+    env:
+      CI: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+      # CI-only throwaway values. No production credentials are used or needed.
+      TEST_DATABASE_URL: postgresql://feather:feather_ci_only@127.0.0.1:5432/feather_touch_test
+      DATABASE_URL: postgresql://feather:feather_ci_only@127.0.0.1:5432/feather_touch_test
+      DIRECT_URL: postgresql://feather:feather_ci_only@127.0.0.1:5432/feather_touch_test
+      SHADOW_DATABASE_URL: postgresql://feather:feather_ci_only@127.0.0.1:5432/feather_touch_shadow
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install (runs prisma generate via postinstall)
+        run: npm ci
+
+      - name: Create Prisma shadow database
+        run: psql "postgresql://feather:feather_ci_only@127.0.0.1:5432/postgres" -c "CREATE DATABASE feather_touch_shadow"
+
+      - name: Prisma schema validate
+        run: npm run db:validate
+
+      - name: Migrations match schema (drift check)
+        run: npm run db:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Integration tests (PostgreSQL)
+        run: npm run test:integration
+
+      - name: Production build WITHOUT application secrets
+        # Proves the build does not require auth/email/WhatsApp/R2 credentials.
+        run: env -u DATABASE_URL -u DIRECT_URL npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E + accessibility (axe)
+        env:
+          BETTER_AUTH_SECRET: ci-only-secret-ci-only-secret-ci-only-secret
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: web/playwright-report
+          retention-days: 7

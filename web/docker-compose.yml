@@ -1,0 +1,73 @@
+# Local development services for the Feather Touch Next.js app.
+# These are LOCAL-ONLY stand-ins for production services:
+#   Postgres  → Neon PostgreSQL
+#   MinIO     → Cloudflare R2 (S3-compatible)
+#   Mailpit   → Resend (email is captured locally, never delivered)
+#
+# Usage:  docker compose up -d     (from web/)
+# Credentials below are throwaway local defaults — never reuse them anywhere else.
+
+name: feather-touch
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: feather
+      POSTGRES_PASSWORD: feather_local_only
+      POSTGRES_DB: feather_touch
+    ports:
+      - "127.0.0.1:54329:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U feather -d feather_touch"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # MinIO no longer publishes community images to Docker Hub/Quay; Chainguard's
+  # build is used for local development only (production uses Cloudflare R2).
+  minio:
+    image: cgr.dev/chainguard/minio:latest
+    user: "0:0" # local-only: lets the server write to the named volume
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: feather_minio
+      MINIO_ROOT_PASSWORD: feather_minio_local_only
+      MC_HOST_local: http://feather_minio:feather_minio_local_only@localhost:9000
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # One-shot: creates the private local media bucket (mirrors the R2 bucket).
+  minio-init:
+    image: cgr.dev/chainguard/minio:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MC_HOST_local: http://feather_minio:feather_minio_local_only@minio:9000
+    entrypoint: ["/usr/bin/mc"]
+    command: ["mb", "--ignore-existing", "local/feather-touch-media"]
+    restart: "no"
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "127.0.0.1:8025:8025" # web UI + HTTP API
+      - "127.0.0.1:1025:1025" # SMTP
+    environment:
+      MP_MAX_MESSAGES: 500
+
+volumes:
+  postgres-data:
+  minio-data:
