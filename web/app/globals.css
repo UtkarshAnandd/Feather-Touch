@@ -1,54 +1,53 @@
 @import "tailwindcss";
+@import "./styles/tokens.css";
 
 /*
- * PHASE 1A — design-independent base only.
- *
- * Tailwind's default colour palette is DISABLED so no un-approved colours can
- * leak into the codebase before the V3 tokens arrive. Phase 1B adds the
- * approved V3 tokens (marigold / leaf / ink, radii, spacing, type scale) and
- * self-hosted fonts in styles/tokens.css.
+ * V3 base layer. Tokens live in styles/tokens.css; Tailwind's default palette
+ * and scales are disabled there so only approved V3 values can be used.
  */
-@theme {
-  --color-*: initial;
-  --color-black: #000;
-  --color-white: #fff;
-  --color-transparent: transparent;
-  --color-current: currentColor;
-}
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    background: var(--color-paper);
   }
 
   body {
-    font-family:
-      system-ui,
-      -apple-system,
-      "Segoe UI",
-      sans-serif;
-    line-height: 1.6;
-    background: #fff;
-    color: #000;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
   }
 
+  /* V3 focus ring: 3px ink, 3px offset. Dark bands (`.on-dark`) switch to paper. */
   :focus-visible {
-    outline: 3px solid currentColor;
-    outline-offset: 2px;
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-paper);
   }
 
   .skip-link {
     position: absolute;
-    left: 0.5rem;
+    left: 12px;
     top: -100%;
-    padding: 0.5rem 1rem;
-    background: #fff;
-    color: #000;
     z-index: 100;
+    padding: 12px 18px;
+    border-radius: var(--radius-control);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
   }
 
   .skip-link:focus {
-    top: 0.5rem;
+    top: 12px;
+    outline-color: var(--color-marigold);
   }
 }
 

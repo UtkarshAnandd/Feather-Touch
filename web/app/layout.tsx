@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { SITE } from "@/content/site";
+import { fontVariables } from "./fonts";
 import "./globals.css";
 
 const isProduction = process.env.SITE_MODE === "production";
@@ -24,11 +25,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#fff6e6", // V3 paper
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-IN">
+    <html lang="en-IN" className={fontVariables}>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to main content

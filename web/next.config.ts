@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   typedRoutes: true,
+  images: {
+    // AVIF first, WebP fallback (V3 spec §9). Next 16 requires an explicit
+    // qualities allowlist. Remote media origins are added with R2 (later phase).
+    formats: ["image/avif", "image/webp"],
+    qualities: [75],
+  },
   turbopack: {
     // This app lives in web/ next to the untouched Eleventy project (which has its
     // own package-lock.json). Pin the root so the workspace is not mis-detected.

@@ -1,43 +1,28 @@
-import Link from "next/link";
-import { PUBLIC_SECTIONS } from "@/content/sections";
-import { SITE } from "@/content/site";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { getSiteMode } from "@/lib/server/env";
 
 /**
- * PHASE 1A STRUCTURAL SHELL — intentionally unstyled.
- * The approved V3 header/footer replace this in Phase 1B. Do not add colours,
- * fonts, imagery or decorative layout here.
+ * Public shell: V3 header, main, V3 footer (Phase 1B).
+ * Homepage sections are built in Phase 2.
  */
-const isPreview = process.env.SITE_MODE !== "production";
-
 export default function PublicLayout({ children }: LayoutProps<"/">) {
+  const isPreview = getSiteMode() !== "production";
   return (
     <>
       {isPreview && (
-        <aside className="preview-banner" aria-label="Preview build notice">
-          Preview build — not the approved V3 design. Not for public use.
+        <aside
+          aria-label="Preview build notice"
+          className="border-flag-line bg-paper-deep text-14 text-flag border-b-[1.5px] border-dashed px-16 py-6 text-center font-bold"
+        >
+          Preview build. Dashed labels mark details the school has not supplied yet. Not for public use.
         </aside>
       )}
-      <header>
-        <Link href="/">{SITE.shortName}</Link>
-        <nav aria-label="Main">
-          <ul>
-            {PUBLIC_SECTIONS.filter((s) => s.id !== "home").map((s) => (
-              <li key={s.id}>
-                <a href={`/#${s.id}`}>{s.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
-      <main id="main-content" tabIndex={-1}>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
         {children}
       </main>
-      <footer>
-        <p>{SITE.name}</p>
-        <p>
-          <Link href="/privacy">Privacy</Link>
-        </p>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

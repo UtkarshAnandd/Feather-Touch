@@ -1,0 +1,279 @@
+/*
+ * Feather Touch V3 design tokens — the ONLY source of visual values.
+ * Values: docs/design/V3-DESIGN-SOURCE.md §3–§7 (from the approved prototype.css).
+ *
+ * Every default Tailwind scale that could introduce a non-V3 value is reset
+ * (`--x-*: initial`) and replaced with V3 values only.
+ *
+ * SPACING: the base unit is 1px, so spacing utilities read as the design's
+ * pixel values (`px-40`, `h-80`, `gap-20` = 40/80/20 px). Do not "convert"
+ * them to the default 4px scale.
+ */
+@theme inline {
+  /* ── Colour ─────────────────────────────────────────────────────────── */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-paper: #fff6e6; /* page background */
+  --color-paper-raised: #fffbf3; /* header bar, shelves, cards */
+  --color-paper-deep: #f6e7ca; /* menu button, active tab, icon circles */
+  --color-kraft: #f1ddb8;
+  --color-line: #e2cfa8;
+  --color-ink: #1e3a2b; /* all text */
+  --color-ink-soft: #4a5a4e;
+  --color-marigold: #e88640; /* fills only, never text */
+  --color-marigold-hover: #f1964f;
+  --color-marigold-ledge: #b5601f;
+  --color-marigold-display: #c1570f; /* display text >= 40px ONLY */
+  --color-marigold-tint: #ffe5c2;
+  --color-marigold-soft: #ffd29b;
+  --color-leaf: #a9cf48; /* fills only, never text (footer tagline excepted, per prototype) */
+  --color-leaf-2: #c8e283;
+  --color-leaf-3: #ddedb0;
+  --color-leaf-tint: #eef6d6;
+  --color-leaf-deep: #3e6a12;
+  --color-navy: #22305a; /* Safety band ONLY */
+  --color-flag: #6b551f;
+  --color-flag-line: #b9a06a;
+  /* Form-only literals from prototype.css */
+  --color-field: #ffffff;
+  --color-field-line: #c9b58c;
+  --color-placeholder: #6e7a70;
+
+  /* ── Typography ─────────────────────────────────────────────────────── */
+  --font-*: initial;
+  --font-display: var(--ff-bricolage), system-ui, sans-serif;
+  --font-body: var(--ff-atkinson), system-ui, sans-serif;
+  --font-accent: var(--ff-fredoka), sans-serif;
+
+  --text-*: initial;
+  --text-11: 11px;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-17: 17px;
+  --text-18: 18px;
+  --text-19: 19px;
+  --text-20: 20px;
+  --text-22: 22px;
+  --text-24: 24px;
+  --text-28: 28px;
+  --text-30: 30px;
+  --text-32: 32px;
+  --text-34: 34px;
+  --text-38: 38px;
+  --text-42: 42px;
+  --text-46: 46px;
+  --text-52: 52px;
+  --text-54: 54px;
+  --text-66: 66px;
+  --text-68: 68px;
+  --text-80: 80px;
+
+  --font-weight-*: initial;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --leading-*: initial;
+  --leading-display: 0.98;
+  --leading-none: 1;
+  --leading-tight: 1.1;
+  --leading-snug: 1.2;
+  --leading-label: 1.22;
+  --leading-tape: 1.25;
+  --leading-ui: 1.3;
+  --leading-list: 1.35;
+  --leading-body: 1.55;
+
+  --tracking-*: initial;
+  --tracking-display: -0.024em;
+  --tracking-heading: -0.02em;
+  --tracking-subheading: -0.012em;
+  --tracking-tab: 0.05em;
+  --tracking-flag: 0.07em;
+  --tracking-need: 0.08em;
+
+  /* ── Spacing & layout ───────────────────────────────────────────────── */
+  --spacing: 1px;
+  --container-*: initial;
+  --container-page: 1280px; /* .wrap max-width (includes the 40px gutters) */
+
+  /* ── Radii ──────────────────────────────────────────────────────────── */
+  --radius-*: initial;
+  --radius-paper: 5px; /* paper mounts, posters */
+  --radius-mat: 3px; /* poster/artwork mat */
+  --radius-thumb: 8px; /* thumbnails, content-required flags */
+  --radius-chip: 10px; /* counter chip */
+  --radius-field: 12px; /* inputs, chips, slide tabs */
+  --radius-control: 14px; /* buttons, controls, need panels */
+  --radius-shelf: 18px; /* shelves, forms, mobile bars */
+  --radius-photo: 22px; /* photos, header bar, form card */
+
+  /* ── Elevation (only the shadows the prototype specifies) ───────────── */
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --shadow-ledge: 0 4px 0 #b5601f;
+  --shadow-ledge-hover: 0 5px 0 #b5601f;
+  --shadow-ledge-active: 0 1px 0 #b5601f;
+  --shadow-round: 0 3px 0 rgb(30 58 43 / 0.24);
+  --shadow-round-hover: 0 4px 0 rgb(30 58 43 / 0.24);
+  --shadow-round-active: 0 1px 0 rgb(30 58 43 / 0.24);
+  --shadow-outline: inset 0 0 0 2px #1e3a2b; /* secondary button */
+  --shadow-bar: 0 2px 0 rgb(30 58 43 / 0.05); /* header bar */
+  --shadow-poster: 0 12px 24px -16px rgb(30 58 43 / 0.55);
+
+  /* ── Breakpoints ────────────────────────────────────────────────────── */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 37.5625rem; /* 601px — above the 390px composition (prototype ≤ 600) */
+  --breakpoint-nav: 75rem; /* 1200px — full header navigation (PROMPT.md) */
+
+  /* ── Motion ─────────────────────────────────────────────────────────── */
+  --ease-*: initial;
+  --ease-standard: ease;
+  --ease-out: ease-out;
+  --animate-*: initial;
+}
+
+/* Tints of ink/paper used by the prototype at exact alphas. */
+:root {
+  --ink-07: rgb(30 58 43 / 0.07); /* secondary button hover */
+  --ink-13: rgb(30 58 43 / 0.13); /* secondary button active, progress track */
+  --ink-16: rgb(30 58 43 / 0.16);
+  --ink-18: rgb(30 58 43 / 0.18);
+  --ink-20: rgb(30 58 43 / 0.2); /* round button border */
+  --paper-on-ink-20: rgb(255 246 230 / 0.2); /* footer base rule */
+  --paper-on-ink-45: rgb(255 246 230 / 0.45); /* footer flag border */
+  --paper-on-ink-80: rgb(255 246 230 / 0.8); /* footer base text */
+  --paper-on-ink-92: rgb(255 246 230 / 0.92); /* footer flag text */
+  --paper-on-ink-22: rgb(255 246 230 / 0.22); /* rules on navy */
+  --paper-on-ink-50: rgb(255 246 230 / 0.5); /* need-panel border on navy */
+  --paper-on-ink-88: rgb(255 246 230 / 0.88); /* lead/body on navy */
+  --white-05: rgb(255 255 255 / 0.05); /* need-panel fill on navy */
+  --flag-bg: rgb(255 251 243 / 0.7);
+  --need-bg: rgb(255 251 243 / 0.55);
+  --tape-strip: rgb(255 251 243 / 0.92);
+
+  /* Motion durations (prototype.css) */
+  --dur-press: 120ms; /* button transform / shadow */
+  --dur-fill: 150ms; /* button background */
+  --dur-ui: 200ms; /* disclosure icons, thumbnails */
+}
+
+/* ── Type styles (composite; exact per V3-DESIGN-SOURCE §4) ───────────── */
+@utility type-display {
+  font-family: var(--font-display);
+  font-weight: 760;
+  font-stretch: 88%;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+}
+
+@utility type-h2 {
+  font-family: var(--font-display);
+  font-weight: 740;
+  font-stretch: 90%;
+  font-size: 34px;
+  line-height: 1.06;
+  letter-spacing: var(--tracking-heading);
+  @media (width >= 37.5625rem) {
+    font-size: 52px;
+    line-height: 1.03;
+  }
+}
+
+@utility type-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 94%;
+  font-size: 24px;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-subheading);
+  @media (width >= 37.5625rem) {
+    font-size: 28px;
+  }
+}
+
+@utility type-h4 {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 17px;
+  line-height: var(--leading-ui);
+}
+
+@utility type-lead {
+  font-size: 17px;
+  line-height: var(--leading-body);
+  color: var(--color-ink-soft);
+  max-width: 34em;
+  @media (width >= 37.5625rem) {
+    font-size: 20px;
+  }
+}
+
+@utility type-body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: var(--leading-body);
+}
+
+/* Fredoka is an ACCENT only: tape captions, tabs, "Step n", one-line notes. */
+@utility type-accent {
+  font-family: var(--font-accent);
+  font-weight: 500;
+}
+
+@utility type-menu-item {
+  font-family: var(--font-display);
+  font-weight: 720;
+  font-stretch: 90%;
+  font-size: 28px;
+}
+
+@utility type-footer-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Ragged paper-tape edge (prototype .tape clip-path). */
+@utility tape-edge {
+  clip-path: polygon(
+    0 12%,
+    3% 0,
+    50% 6%,
+    97% 0,
+    100% 14%,
+    99% 50%,
+    100% 88%,
+    97% 100%,
+    50% 94%,
+    3% 100%,
+    0 86%,
+    1% 50%
+  );
+}
+
+/* Poster tape strip edge (prototype .tape-strip clip-path). */
+@utility tape-strip-edge {
+  clip-path: polygon(0 12%, 6% 0, 94% 8%, 100% 0, 98% 50%, 100% 100%, 94% 90%, 5% 100%, 0 88%, 2% 50%);
+}
+
+/* Current-page brush underlay (brush-lime.png): current nav item ONLY. */
+@utility brush-underlay {
+  position: relative;
+  z-index: 0;
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: url("../../assets/brand/brush-lime.png") no-repeat center / 100% 100%;
+    pointer-events: none;
+  }
+}

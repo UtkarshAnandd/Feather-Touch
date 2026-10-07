@@ -18,13 +18,16 @@ const PRESERVED_ANCHORS = [
   "contact",
 ];
 
-test.describe("public shell (Phase 1A, unstyled)", () => {
+test.describe("public shell", () => {
   test("renders landmarks, skip link and preserved Eleventy anchors", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("html")).toHaveAttribute("lang", "en-IN");
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
     await expect(page.getByRole("main")).toHaveCount(1);
-    await expect(page.getByRole("navigation", { name: "Main" })).toBeVisible();
+    // ≥1200px the "Main" nav is in the header; below that it is inside the menu dialog.
+    const desktop = (page.viewportSize()?.width ?? 0) >= 1200;
+    if (desktop) await expect(page.getByRole("navigation", { name: "Main" })).toBeVisible();
+    else await expect(page.getByRole("button", { name: "Menu", exact: true })).toBeVisible();
     for (const id of PRESERVED_ANCHORS) await expect(page.locator(`#${id}`)).toHaveCount(1);
   });
 
