@@ -10,7 +10,10 @@ import { MountedPhoto, Tape } from "@/components/ui/paper";
 import { RoundButton } from "@/components/ui/round-button";
 import { RuledList } from "@/components/ui/ruled-list";
 import { TextLink } from "@/components/ui/text-link";
+import { HeroSlideshow } from "@/components/home/hero-slideshow";
+import { HERO_SLIDESHOW_SEED } from "@/content/media";
 import { getSiteMode } from "@/lib/server/env";
+import { MAX_HERO_SLIDES, type SlideshowSlide } from "@/lib/slideshow";
 
 export const metadata: Metadata = {
   title: "V3 design system (preview)",
@@ -45,6 +48,25 @@ const SWATCHES = [
   ["flag", "#6B551F", "bg-flag"],
   ["flag-line", "#B9A06A", "bg-flag-line"],
 ] as const;
+
+/**
+ * TEST FIXTURE — not content. Repeats the three approved preview photos to
+ * exercise the 7-slide controls (the final photos are admin-managed and come
+ * from the school). Never used on the homepage; this page 404s in production.
+ */
+const FIXTURE_PHOTOS = HERO_SLIDESHOW_SEED.filter((r) => !r.isPlaceholder);
+const SEVEN_SLIDE_FIXTURE: SlideshowSlide[] = Array.from({ length: MAX_HERO_SLIDES }, (_, i) => {
+  const base = FIXTURE_PHOTOS[i % FIXTURE_PHOTOS.length]!;
+  return {
+    id: `fixture-${i + 1}`,
+    image: base.image,
+    alt: base.alt,
+    caption: `Test fixture slide ${i + 1} of ${MAX_HERO_SLIDES}`,
+    tabLabel: `Test ${i + 1}`,
+    focal: base.focal,
+    isPlaceholder: false,
+  };
+});
 
 const ICONS: IconName[] = [
   "arrow-right",
@@ -188,6 +210,17 @@ export default function DesignSystemPage() {
         <NeedPanel className="mt-24 max-w-[420px]">
           A real Day Care moment at Feather Touch: a camera-original photograph, with consent confirmed.
         </NeedPanel>
+      </Group>
+
+      <Group id="ds-slideshow-fixture" title="Slideshow layout test fixture (7 slides)">
+        <p className="text-16 text-ink-soft mb-32 max-w-[40em]">
+          <b className="text-ink">Test fixture, not content.</b> Repeats the three approved preview photos to
+          exercise the 7-slide controls: compact thumbnails from 601px, progress segments below. The real
+          slideshow is admin-managed; this fixture never appears on the homepage or in production.
+        </p>
+        <div className="max-w-[472px]" data-testid="slideshow-fixture">
+          <HeroSlideshow slides={SEVEN_SLIDE_FIXTURE} label="Seven-slide layout test fixture" />
+        </div>
       </Group>
 
       <Group id="ds-icons" title="Icons">

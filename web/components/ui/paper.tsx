@@ -81,13 +81,21 @@ const TAPE_TONE = {
 } as const;
 
 /** Paper-tape caption/eyebrow: Fredoka, ragged edges, rotated −2°. */
+const TAPE_SIZE = {
+  md: "text-15",
+  // Slideshow caption: 13px on phones, 15px from 601px (prototype .ss-cap).
+  responsive: "text-13 sm:text-15",
+} as const;
+
 export function Tape({
   tone = "paper",
+  size = "md",
   as: Tag = "span",
   className,
   children,
 }: {
   tone?: keyof typeof TAPE_TONE;
+  size?: keyof typeof TAPE_SIZE;
   as?: "span" | "p" | "figcaption";
   className?: string;
   children: ReactNode;
@@ -95,7 +103,8 @@ export function Tape({
   return (
     <Tag
       className={cx(
-        "tape-edge type-accent text-15 leading-tape text-ink inline-block -rotate-2 px-15 pt-7 pb-8",
+        "tape-edge type-accent leading-tape text-ink inline-block -rotate-2 px-15 pt-7 pb-8",
+        TAPE_SIZE[size],
         TAPE_TONE[tone],
         className,
       )}

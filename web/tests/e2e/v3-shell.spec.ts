@@ -215,6 +215,18 @@ test.describe("V3 mobile menu", () => {
     expect(await htmlOverflow(page)).toBe("");
   });
 
+  test("the logo link inside the menu closes it and unlocks scroll", async ({ page }) => {
+    await page.goto("/#faq");
+    await trigger(page).click();
+    await expect(dialog(page)).toBeVisible();
+    await dialog(page)
+      .getByRole("link", { name: "Feather Touch Foundation School and Day Care Centre, home" })
+      .click();
+    await expect(dialog(page)).toBeHidden();
+    await expect(trigger(page)).toHaveAttribute("aria-expanded", "false");
+    expect(await htmlOverflow(page)).toBe("");
+  });
+
   test("menu marks the current page and shows both visit CTAs", async ({ page }) => {
     await page.goto("/");
     await trigger(page).click();
@@ -279,6 +291,16 @@ test.describe("V3 footer", () => {
     await expect(
       footer.getByText(/^© \d{4} Feather Touch Foundation School and Day Care Centre$/),
     ).toBeVisible();
+  });
+
+  test("Explore links have a comfortable hit height (≥24px)", async ({ page }) => {
+    await page.goto("/");
+    const heights = await page
+      .getByRole("navigation", { name: "Explore" })
+      .getByRole("link")
+      .evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+    expect(heights).toHaveLength(5);
+    for (const h of heights) expect(h).toBeGreaterThanOrEqual(26);
   });
 
   test("unsupplied school facts show preview-only content-required flags", async ({ page }) => {

@@ -57,7 +57,7 @@ export function SiteFooter() {
           <ul>
             {FOOTER_NAV.map((item) => (
               <li key={item.href + item.label} className="my-6">
-                <a href={item.href} className="text-paper no-underline hover:underline">
+                <a href={item.href} className="text-paper inline-block no-underline hover:underline">
                   {item.label}
                 </a>
               </li>

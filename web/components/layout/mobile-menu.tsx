@@ -120,7 +120,15 @@ export function MobileMenu({ brand, contact }: { brand: ReactNode; contact?: Rea
       >
         <div className="max-w-page mx-auto flex min-h-full flex-col px-12 pt-10 pb-24 sm:px-40 sm:pt-16">
           <div className="rounded-shelf border-line bg-paper-raised sm:rounded-photo flex h-64 items-center gap-10 border-[1.5px] pr-8 pl-12 sm:h-80 sm:gap-24 sm:pr-14 sm:pl-20">
-            {brand}
+            {/* The logo link navigates too, so it closes the menu like the other links. */}
+            <div
+              className="contents"
+              onClick={(e) => {
+                if ((e.target as HTMLElement).closest("a")) closeMenu({ returnFocus: false });
+              }}
+            >
+              {brand}
+            </div>
             <button
               ref={closeRef}
               type="button"
